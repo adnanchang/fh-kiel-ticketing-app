@@ -1,0 +1,46 @@
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\ApplicationInsights.config
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\FH Kiel Ticketing App.dll.config
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\FH Kiel Ticketing App.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\FH Kiel Ticketing App.pdb
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Antlr3.Runtime.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Microsoft.AI.Web.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Microsoft.ApplicationInsights.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Newtonsoft.Json.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\System.Web.Helpers.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\System.Web.Mvc.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\System.Web.Optimization.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\System.Web.Razor.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\System.Web.WebPages.Deployment.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\System.Web.WebPages.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\System.Web.WebPages.Razor.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\WebGrease.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\System.Web.Helpers.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\System.Web.Mvc.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\System.Web.Optimization.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\System.Web.Razor.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\System.Web.WebPages.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\System.Web.WebPages.Deployment.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\System.Web.WebPages.Razor.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Antlr3.Runtime.pdb
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Newtonsoft.Json.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Microsoft.ApplicationInsights.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\Microsoft.AI.Web.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\obj\Debug\FH Kiel Ticketing App.csprojResolveAssemblyReference.cache
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\obj\Debug\FH Kiel Ticketing App.csproj.CoreCompileInputs.cache
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\obj\Debug\FH Kiel Ticketing App.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\obj\Debug\FH Kiel Ticketing App.pdb
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\EntityFramework.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\EntityFramework.SqlServer.dll
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\EntityFramework.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\EntityFramework.SqlServer.xml
