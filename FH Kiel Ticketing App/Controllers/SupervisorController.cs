@@ -1,5 +1,4 @@
 ﻿using FH_Kiel_Ticketing_App.Context;
-using FH_Kiel_Ticketing_App.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +7,9 @@ using System.Web.Mvc;
 
 namespace FH_Kiel_Ticketing_App.Controllers
 {
-    public class StudentController : Controller
+    public class SupervisorController : Controller
     {
-        // GET: Student
+        // GET: Supervisor
         public ActionResult Index()
         {
             if (IsLoggedIn() && IsAuthorized())
@@ -29,19 +28,19 @@ namespace FH_Kiel_Ticketing_App.Controllers
             }
         }
 
-        // GET: Student/Details/5
+        // GET: Supervisor/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: Student/Create
+        // GET: Supervisor/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Student/Create
+        // POST: Supervisor/Create
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
@@ -57,13 +56,13 @@ namespace FH_Kiel_Ticketing_App.Controllers
             }
         }
 
-        // GET: Student/Edit/5
+        // GET: Supervisor/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: Student/Edit/5
+        // POST: Supervisor/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
@@ -79,13 +78,13 @@ namespace FH_Kiel_Ticketing_App.Controllers
             }
         }
 
-        // GET: Student/Delete/5
+        // GET: Supervisor/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: Student/Delete/5
+        // POST: Supervisor/Delete/5
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
@@ -119,7 +118,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
         {
             if (Request.Cookies["UserCookie"] != null)
             {
-                if (Request.Cookies["UserCookie"]["UserRole"].ToString() == "Student")
+                if (Request.Cookies["UserCookie"]["UserRole"].ToString() == "Supervisor")
                 {
                     return true;
                 }

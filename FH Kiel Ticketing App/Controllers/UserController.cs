@@ -95,17 +95,17 @@ namespace FH_Kiel_Ticketing_App.Controllers
         //Login
         public ActionResult Login()
         {
-            if (Session["User"] != null)
+            if (Request.Cookies["UserCookie"] != null)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", Request.Cookies["UserCookie"]["UserRole"].ToString());
             }
             return View();
         }
 
         [HttpPost]
-        public ActionResult Login(User user, string returnUrl= "")
+        public ActionResult Login(User user, string returnUrl = "")
         {
-            
+            KillUserCookie();
             using (TicketingApp db = new TicketingApp())
             {
                 var loggedInUser = db.User.Where(u => u.email == user.email).FirstOrDefault();
@@ -120,17 +120,8 @@ namespace FH_Kiel_Ticketing_App.Controllers
                             return View();
                         }
 
-                        // Making the Cookie
-                        int timeout = 20;
-                        var ticket = new FormsAuthenticationTicket(user.email, false, timeout);
-                        string encrypted = FormsAuthentication.Encrypt(ticket);
-                        var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted);
-                        cookie.Expires = DateTime.Now.AddMinutes(timeout);
-                        cookie.HttpOnly = true;
-                        Response.Cookies.Add(cookie);
-
                         //Checking the role
-                        MailAddress address = new MailAddress(user.email);
+                        MailAddress address = new MailAddress(loggedInUser.email);
                         string identifier = address.Host;
 
                         var role = db.RoleIdentifier
@@ -146,16 +137,20 @@ namespace FH_Kiel_Ticketing_App.Controllers
                         }
                         else
                         {
-                           
-
-                           return RedirectToAction("Index");
+                            // Making the Cookie
+                            HttpCookie httpCookie = new HttpCookie("UserCookie");
+                            httpCookie["UserID"] = loggedInUser.recordID.ToString();
+                            httpCookie["UserRole"] = role.RoleIdentifier.role;
+                            httpCookie.Expires = DateTime.Now.AddMinutes(30);
+                            Response.Cookies.Add(httpCookie);
+                            return RedirectToAction("Index", Request.Cookies["UserCookie"]["UserRole"].ToString());
                         }
                     }
                     else
                     {
                         ModelState.AddModelError("", "The username or password is wrong");
                     }
-                    
+
                 }
                 else
                 {
@@ -166,12 +161,21 @@ namespace FH_Kiel_Ticketing_App.Controllers
         }
 
         //Logout
-        [Authorize]
-        [HttpPost]
         public ActionResult Logout()
         {
-            FormsAuthentication.SignOut();
+            KillUserCookie();
             return RedirectToAction("Login");
+        }
+
+        [NonAction]
+        private void KillUserCookie()
+        {
+            if (Request.Cookies["UserCookie"] != null)
+            {
+                var c = new HttpCookie("UserCookie");
+                c.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(c);
+            }
         }
 
         //Register
@@ -252,7 +256,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                     {
                         message = "Your email maybe valid but seems like you're not recognized by our system. Please check if it's correct.";
                     }
-                    
+
                 }
                 ModelState.Clear();
             }
@@ -276,7 +280,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
             {
                 var user = db.User.Where(u => u.email == email).FirstOrDefault();
                 return user != null;
-            }   
+            }
         }
 
         [NonAction]
@@ -314,7 +318,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
         [HttpGet]
         public ActionResult VerifyAccount(string ac, int? id)
         {
-            
+
             bool status = false;
             User user = new Models.User();
             using (TicketingApp db = new TicketingApp())
@@ -377,7 +381,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                     string body = "<br/><br/>If this wasn't done by you then please ignore this email. " +
                         "Otherwise Please Click on the link below to reset your password.";
                     string targetUrl = "/User/ResetPassword/";
-                    
+
                     SendVerificationEmail(user.recordID, user.email, user.activationCode.ToString(), targetUrl, subject, body);
                     status = true;
                     message = "Please check your email for a reset password link.";
@@ -409,7 +413,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 {
                     user = null;
                 }
-                
+
                 db.Configuration.ValidateOnSaveEnabled = false;
                 if (user != null)
                 {
@@ -455,7 +459,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 {
                     message = "Something ugly happened behind the scenes. Maybe you can try again later.";
                 }
-               
+
             }
             ViewBag.Message = message;
             ViewBag.Status = status;
@@ -463,5 +467,5 @@ namespace FH_Kiel_Ticketing_App.Controllers
         }
     }
 
-    
+
 }

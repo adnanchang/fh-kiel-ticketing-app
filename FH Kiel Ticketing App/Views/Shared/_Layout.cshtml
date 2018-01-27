@@ -12,18 +12,18 @@
             I am going to overwrite css rather than
             messing up with the original bootstrap file
         */
-        .navbar-inverse {
+        /*.navbar-inverse {
             background-color: #3C5984; /*Fachhochschules Color*/
-            border-color: #314A68;
-        }
+            /*border-color: #314A68;
+       }*/
 
-            .navbar-inverse .navbar-brand {
+            /*.navbar-inverse .navbar-brand {
                 color: white;
-            }
+            }*/
 
-            .navbar-inverse .navbar-text {
+            /*.navbar-inverse .navbar-text {
                 color: white;
-            }
+            }*/
 
         .img {
             width: 2rem;
@@ -31,7 +31,7 @@
     </style>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -39,28 +39,36 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="~/User/Login"><img class="navbar-left" style="width: 4.5rem; padding-top: 10px; padding-bottom: 10px; padding-right: 10px;" 
-                                            src="@Url.Content("~/withoutBackground.png")" /></a>
+                <a href="~/User/Login">
+                    <img class="navbar-left" style="width: 4.5rem; padding-top: 10px; padding-bottom: 10px; padding-right: 10px;"
+                         src="@Url.Content("~/withoutBackground.png")" />
+                </a>
                 @Html.ActionLink("Ticketing App", "Login", "User", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    
-                </ul>
-                @if (Request.IsAuthenticated)
+                <ul class="nav navbar-nav"></ul>
+                @if (Request.Cookies["UserCookie"] != null)
                 {
-                    <div class="navbar-right">
-                       @using (Html.BeginForm("Logout", "User", FormMethod.Post, new { id = "logoutForm" }))
-                       {
-                           <a href="javascript:document.getElementById('logoutForm')" class="navbar-brand">Logout</a>
-                       }
-                    </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a>Hey, @Model.firstName</a></li>
+                        <li><a href="#">Notifications <span class="badge">2</span></a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Settings<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="/User/Logout">Profile Settings</a></li>
+                                <li><a href="/User/Logout">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
                 }
             </div>
 
         </div>
     </div>
     <div class="container body-content">
+        <br />
         @RenderBody()
         <hr />
         <footer>

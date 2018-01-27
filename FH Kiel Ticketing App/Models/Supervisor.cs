@@ -13,5 +13,7 @@ namespace FH_Kiel_Ticketing_App.Models
         public int recordID { get; set; }
 
         public virtual User User { get; set; }
+
+        public string field { get; set; }
     }
 }
