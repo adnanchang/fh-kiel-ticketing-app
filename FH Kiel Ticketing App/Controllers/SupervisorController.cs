@@ -110,9 +110,9 @@ namespace FH_Kiel_Ticketing_App.Controllers
                         {
                             fields.Add(db.Fields.Where(f => f.recordID == item).FirstOrDefault());
                         }
+                        supervisor.Fields.Clear();
                         foreach (var item in fields)
                         {
-                            supervisor.Fields.Clear();
                             supervisor.Fields.Add(item);
                         }
                         db.SaveChanges();
