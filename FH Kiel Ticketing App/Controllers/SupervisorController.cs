@@ -1,4 +1,5 @@
 ﻿using FH_Kiel_Ticketing_App.Context;
+using FH_Kiel_Ticketing_App.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,14 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 using (TicketingApp db = new TicketingApp())
                 {
                     var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
+                    var supervisor = db.Supervisor.Where(s => s.recordID == userID).FirstOrDefault();
 
-                    return View(user);
+                    var supervisorUser = new SupervisorUserViewModel
+                    {
+                        user = user,
+                        supervisor = supervisor
+                    };
+                    return View(supervisorUser);
                 }
             }
             else
@@ -57,19 +64,60 @@ namespace FH_Kiel_Ticketing_App.Controllers
         }
 
         // GET: Supervisor/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            if (IsLoggedIn() && IsAuthorized())
+            {
+                using (TicketingApp db = new TicketingApp())
+                {
+                    var user = db.User.Where(u => u.recordID == id).FirstOrDefault();
+                    var supervisor = db.Supervisor.Where(s => s.recordID == id).FirstOrDefault();
+                    var fields = db.Fields.ToList();
+                    var supervisorFields = db.Fields.Where(f => f.Supervisor.Any(s => s.recordID == id)).ToList();
+                    var selectedFields = supervisorFields.Select(x => x.recordID).ToArray();
+
+                    var supervisorUser = new SupervisorUserFieldViewModel
+                    {
+                        user = user,
+                        supervisor = supervisor,
+                        SupervisorFields = supervisorFields,
+                        AllFields = fields,
+                        selectedFields = selectedFields
+                    };
+                    return View(supervisorUser);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "User");
+            }
         }
 
         // POST: Supervisor/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, SupervisorUserFieldViewModel supervisorUser)
         {
             try
             {
                 // TODO: Add update logic here
-
+                if (ModelState.IsValid)
+                {
+                    using (TicketingApp db = new TicketingApp())
+                    {
+                        var supervisor = db.Supervisor.Where(s => s.recordID == supervisorUser.supervisor.recordID).FirstOrDefault();
+                        var fields = new List<Fields>();
+                        foreach (int item in supervisorUser.selectedFields)
+                        {
+                            fields.Add(db.Fields.Where(f => f.recordID == item).FirstOrDefault());
+                        }
+                        foreach (var item in fields)
+                        {
+                            supervisor.Fields.Clear();
+                            supervisor.Fields.Add(item);
+                        }
+                        db.SaveChanges();
+                    }
+                }
                 return RedirectToAction("Index");
             }
             catch

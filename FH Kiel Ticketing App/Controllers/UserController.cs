@@ -139,6 +139,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                         {
                             // Making the Cookie
                             HttpCookie httpCookie = new HttpCookie("UserCookie");
+
                             httpCookie["UserID"] = loggedInUser.recordID.ToString();
                             httpCookie["UserRole"] = role.RoleIdentifier.role;
                             httpCookie.Expires = DateTime.Now.AddMinutes(30);

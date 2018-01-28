@@ -14,6 +14,8 @@ namespace FH_Kiel_Ticketing_App.Models
 
         public virtual User User { get; set; }
 
-        public string field { get; set; }
+        [NotMapped]
+        public int[] selectedFields { get; set; }
+        public virtual ICollection<Fields> Fields { get; set; }
     }
 }

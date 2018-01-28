@@ -39,11 +39,6 @@ namespace FH_Kiel_Ticketing_App.Models
         [Compare("password", ErrorMessage = "It seems like the passwords don't match, please retype.")]
         public string confirmPassword { get; set; }
 
-        [Required(ErrorMessage = "Matrkel Number is Required")]
-        [DisplayName("Matrikel Number")]
-        [DataType(DataType.Text)]
-        public int matrikelNumber { get; set; }
-
         public bool isEmailVerified { get; set; }
 
         public System.Guid activationCode { get; set; }

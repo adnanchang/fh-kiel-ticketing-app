@@ -56,6 +56,9 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MvcCheckBoxList, Version=1.4.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvcCheckBoxList.1.4.5\lib\net45\MvcCheckBoxList.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -158,10 +161,15 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Fields.cs" />
+    <Compile Include="Models\Idea.cs" />
     <Compile Include="Models\RoleIdentifier.cs" />
     <Compile Include="Models\RoleIdentifierDetails.cs" />
     <Compile Include="Models\Student.cs" />
+    <Compile Include="Models\StudentUserViewModel.cs" />
     <Compile Include="Models\Supervisor.cs" />
+    <Compile Include="Models\SupervisorUserFieldViewModel.cs" />
+    <Compile Include="Models\SupervisorUserViewModel.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -212,6 +220,8 @@
     <Content Include="Views\User\ResetPassword.cshtml" />
     <Content Include="Views\Student\Index.cshtml" />
     <Content Include="Views\Supervisor\Index.cshtml" />
+    <Content Include="Views\Student\Edit.cshtml" />
+    <Content Include="Views\Supervisor\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

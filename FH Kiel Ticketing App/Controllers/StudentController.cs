@@ -19,8 +19,14 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 using (TicketingApp db = new TicketingApp())
                 {
                     var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
+                    var student = db.Student.Where(s => s.recordID == userID).FirstOrDefault();
 
-                    return View(user);
+                    var studentUser = new StudentUserViewModel
+                    {
+                        user = user,
+                        student = student
+                    };
+                    return View(studentUser);
                 }
             }
             else
@@ -58,18 +64,44 @@ namespace FH_Kiel_Ticketing_App.Controllers
         }
 
         // GET: Student/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            if (IsLoggedIn() && IsAuthorized())
+            {
+                using (TicketingApp db = new TicketingApp())
+                {
+                    var user = db.User.Where(u => u.recordID == id).FirstOrDefault();
+                    var student = db.Student.Where(s => s.recordID == id).FirstOrDefault();
+
+                    var studentUser = new StudentUserViewModel
+                    {
+                        user = user,
+                        student = student
+                    };
+                    return View(studentUser);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "User");
+            }
         }
 
         // POST: Student/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, StudentUserViewModel studentUser)
         {
             try
             {
                 // TODO: Add update logic here
+                if (ModelState.IsValid)
+                {
+                    using (TicketingApp db = new TicketingApp())
+                    {
+                        db.Entry(studentUser.student).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
 
                 return RedirectToAction("Index");
             }

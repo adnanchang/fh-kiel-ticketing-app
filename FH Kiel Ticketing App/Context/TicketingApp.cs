@@ -14,6 +14,8 @@ namespace FH_Kiel_Ticketing_App.Context
         public DbSet<Supervisor> Supervisor { get; set; }
         public DbSet<RoleIdentifier> RoleIdentifier { get; set; }
         public DbSet<RoleIdentifierDetails> RoleIdentifierDetails { get; set; }
+        public DbSet<Idea> Idea { get; set; }
+        public DbSet<Fields> Fields { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

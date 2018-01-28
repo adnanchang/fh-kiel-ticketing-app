@@ -13,6 +13,11 @@ namespace FH_Kiel_Ticketing_App.Models
         [Key, ForeignKey("User")]
         public int recordID { get; set; }
 
+        [Required(ErrorMessage = "Matrkel Number is Required")]
+        [DisplayName("Matrikel Number")]
+        [DataType(DataType.Text)]
+        public int matrikelNumber { get; set; }
+
         [DisplayName("Beginning Semester")]
         public string beginningSemesterSeason { get; set; }
 

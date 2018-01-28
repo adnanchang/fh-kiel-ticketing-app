@@ -44,3 +44,4 @@ C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\
 C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\EntityFramework.SqlServer.dll
 C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\EntityFramework.xml
 C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\EntityFramework.SqlServer.xml
+C:\Users\Edd Chang\source\repos\FH Kiel Ticketing App\FH Kiel Ticketing App\bin\MvcCheckBoxList.dll
