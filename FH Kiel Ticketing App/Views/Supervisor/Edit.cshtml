@@ -19,7 +19,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.supervisor.Fields, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                    @Html.CheckBoxListFor(model => model.selectedFields, model => model.AllFields, x => x.recordID, x => x.field, model => model.SupervisorFields)
+                    @Html.CheckBoxListFor(model => model.selectedFields, model => model.AllFields, x => x.recordID, x => x.field, model => model.SupervisorFields, MvcCheckBoxList.Model.Position.Vertical)
             </div>
         </div>
 
