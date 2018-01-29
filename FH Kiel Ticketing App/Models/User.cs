@@ -42,5 +42,9 @@ namespace FH_Kiel_Ticketing_App.Models
         public bool isEmailVerified { get; set; }
 
         public System.Guid activationCode { get; set; }
+
+        public virtual ICollection<Idea> Ideas { get; set; }
+
+        public virtual ICollection<Contributors> Contributors { get; set; }
     }
 }

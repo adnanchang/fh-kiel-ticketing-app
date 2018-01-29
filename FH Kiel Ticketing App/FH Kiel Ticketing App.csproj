@@ -161,6 +161,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Contributors.cs" />
     <Compile Include="Models\Fields.cs" />
     <Compile Include="Models\Idea.cs" />
     <Compile Include="Models\RoleIdentifier.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Models\Supervisor.cs" />
     <Compile Include="Models\SupervisorUserFieldViewModel.cs" />
     <Compile Include="Models\SupervisorUserViewModel.cs" />
+    <Compile Include="Models\Ticket.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

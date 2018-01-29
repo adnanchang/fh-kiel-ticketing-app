@@ -10,24 +10,27 @@ namespace FH_Kiel_Ticketing_App.Controllers
 {
     public class StudentController : Controller
     {
+        TicketingApp db = new TicketingApp();
         // GET: Student
         public ActionResult Index()
         {
             if (IsLoggedIn() && IsAuthorized())
             {
                 int userID = GetUserID();
-                using (TicketingApp db = new TicketingApp())
-                {
-                    var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
-                    var student = db.Student.Where(s => s.recordID == userID).FirstOrDefault();
 
-                    var studentUser = new StudentUserViewModel
-                    {
-                        user = user,
-                        student = student
-                    };
-                    return View(studentUser);
-                }
+                var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
+                var student = db.Student.Where(s => s.recordID == userID).FirstOrDefault();
+                var ticket = db.Ticket.Where(t => t.Contributors.Any(c => c.User.recordID == userID)).FirstOrDefault();
+                var idea = db.Idea.Where(i => i.User.recordID != userID).ToList();
+
+                var studentUser = new StudentUserViewModel
+                {
+                    user = user,
+                    student = student,
+                    ticket = ticket,
+                    availableIdeas = idea
+                };
+                return View(studentUser);
             }
             else
             {

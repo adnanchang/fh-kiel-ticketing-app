@@ -17,9 +17,15 @@ namespace FH_Kiel_Ticketing_App.Models
         [DisplayName("Title")]
         public string title { get; set; }
 
+        [Required(ErrorMessage = "The Idea needs a small description")]
+        [DisplayName("Description")]
+        public string description { get; set; }
+
         [Required(ErrorMessage = "The Idea needs a type")]
         public string type { get; set; }
 
-        //The proposal file goes here
+        public virtual User User { get; set; } //The person who created the idea
+
+        //The connection to proposal file goes here
     }
 }
