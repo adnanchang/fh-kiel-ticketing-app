@@ -30,6 +30,12 @@ namespace FH_Kiel_Ticketing_App.Controllers
                     ticket = ticket,
                     availableIdeas = idea
                 };
+
+                if (student.matrikelNumber == 0)
+                {
+                    ViewBag.IsDataSet = false;
+                }
+
                 return View(studentUser);
             }
             else

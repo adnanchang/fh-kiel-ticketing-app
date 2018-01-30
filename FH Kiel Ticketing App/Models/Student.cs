@@ -25,6 +25,8 @@ namespace FH_Kiel_Ticketing_App.Models
         [DataType(DataType.Text)]
         public int beginningSemesterYear { get; set; }
 
+        public string userType { get; set; }
+
         public virtual User User { get; set; }
     }
 }

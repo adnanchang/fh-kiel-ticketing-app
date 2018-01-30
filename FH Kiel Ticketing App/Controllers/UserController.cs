@@ -230,6 +230,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                         {
                             Student student = new Student();
                             student.recordID = user.recordID;
+                            student.userType = "Student";
                             db.Student.Add(student);
                             db.SaveChanges();
                             roleOfUser = "Student";
@@ -238,6 +239,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                         {
                             Supervisor supervisor = new Supervisor();
                             supervisor.recordID = user.recordID;
+                            supervisor.userType = "Supervisor";
                             db.Supervisor.Add(supervisor);
                             db.SaveChanges();
                             roleOfUser = "Supervisor";
