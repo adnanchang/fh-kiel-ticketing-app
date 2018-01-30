@@ -210,6 +210,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 user.confirmPassword = user.password; // To avoid EntityValidationError
 
                 user.isEmailVerified = false;
+                user.emailNotification = true;
 
                 using (TicketingApp db = new TicketingApp())
                 {
