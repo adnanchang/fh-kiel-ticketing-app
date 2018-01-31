@@ -103,11 +103,25 @@ namespace FH_Kiel_Ticketing_App.Controllers
             try
             {
                 // TODO: Add update logic here
+                ModelState.Remove("User.firstName");
+                ModelState.Remove("User.lastName");
+                ModelState.Remove("User.email");
+                ModelState.Remove("User.password");
+                ModelState.Remove("User.confirmPassword");
                 if (ModelState.IsValid)
                 {
                     using (TicketingApp db = new TicketingApp())
                     {
-                        db.Entry(studentUser.student).State = System.Data.Entity.EntityState.Modified;
+                        db.Configuration.ValidateOnSaveEnabled = false;
+                        var user = db.User.Where(u => u.recordID == studentUser.user.recordID).FirstOrDefault();
+                        var student = db.Student.Where(s => s.recordID == studentUser.user.recordID).FirstOrDefault();
+
+                        user.emailNotification = studentUser.user.emailNotification;
+
+                        student.matrikelNumber = studentUser.student.matrikelNumber;
+                        student.beginningSemesterSeason = studentUser.student.beginningSemesterSeason;
+                        student.beginningSemesterYear = studentUser.student.beginningSemesterYear;
+
                         db.SaveChanges();
                     }
                 }

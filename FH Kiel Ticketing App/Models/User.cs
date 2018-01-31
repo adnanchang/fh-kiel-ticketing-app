@@ -43,6 +43,7 @@ namespace FH_Kiel_Ticketing_App.Models
 
         public System.Guid activationCode { get; set; }
 
+        [DisplayName("Email Notifications")]
         public bool emailNotification { get; set; }
 
         public virtual ICollection<Idea> Ideas { get; set; }
