@@ -1,0 +1,31 @@
+﻿@model IEnumerable<FH_Kiel_Ticketing_App.Models.Proposal>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.nameOfProject)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.nameOfProject)
+                @Html.ActionLink("Export PDF", "ExportPDF", new { recordID = item.recordID })
+            </td>
+
+        </tr>
+    }
+
+</table>
+
