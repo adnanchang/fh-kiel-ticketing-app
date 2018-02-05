@@ -23,7 +23,10 @@ namespace FH_Kiel_Ticketing_App.Controllers
             {
                 var proposals = db.Proposal.ToList();
 
-                return View(proposals);
+                if (proposals != null)
+                    return View(proposals);
+                else
+                    return View();
             }
         }
 

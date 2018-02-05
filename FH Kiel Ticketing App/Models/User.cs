@@ -49,5 +49,7 @@ namespace FH_Kiel_Ticketing_App.Models
         public virtual ICollection<Idea> Ideas { get; set; }
 
         public virtual ICollection<Contributors> Contributors { get; set; }
+
+        public virtual ICollection<Notification> Notification { get; set; }
     }
 }

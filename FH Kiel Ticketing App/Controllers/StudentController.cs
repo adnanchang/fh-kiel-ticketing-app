@@ -156,6 +156,55 @@ namespace FH_Kiel_Ticketing_App.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult Notifications()
+        {
+            if (IsLoggedIn() && IsAuthorized())
+            {
+                int userID = GetUserID();
+
+                var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
+                var notifications = db.Notification.Where(n => 
+                        n.User.recordID == userID && 
+                        n.isRead == false).ToList();
+                var justChecking = user.Notification.Count();
+
+                var viewModel = new StudentNotificationViewModel
+                {
+                    user = user,
+                    notifications = notifications
+                };
+
+                return View(viewModel);
+            }
+            else
+            {
+                return RedirectToAction("Login", "User");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Notifications(FormCollection formCollection)
+        {
+            if (IsLoggedIn() && IsAuthorized())
+            {
+                using (TicketingApp db = new TicketingApp())
+                {
+                    TempData["message"] = "This is a test notification sent at " + DateTime.Now.ToLongTimeString();
+                    TempData["targetURL"] = "/User/Login";
+                    TempData["users"] = db.User.ToList();
+                    TempData["returnURLName"] = "Login";
+                    TempData["returnURLController"] = "User";
+                    return RedirectToAction("Create", "Notification", new { area = "" });
+                }
+                    
+            }
+            else
+            {
+                return RedirectToAction("Login", "User");
+            }
+        }
+
         [NonAction]
         public bool IsLoggedIn()
         {

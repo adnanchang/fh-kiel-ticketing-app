@@ -19,7 +19,8 @@ namespace FH_Kiel_Ticketing_App.Context
         public DbSet<Ticket> Ticket { get; set; }
         public DbSet<Contributors> Contributor { get; set; }
 		public DbSet<Proposal> Proposal { get; set; }
-		
+        public DbSet<Notification> Notification { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer<TicketingApp>(null);

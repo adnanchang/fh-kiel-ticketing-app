@@ -156,10 +156,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Context\TicketingApp.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\SupervisorController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-	<Compile Include="Controllers\ProposalController.cs" />
+    <Compile Include="Controllers\ProposalController.cs" />
     <Compile Include="Custom\Email.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -168,6 +169,7 @@
     <Compile Include="Models\Contributors.cs" />
     <Compile Include="Models\Fields.cs" />
     <Compile Include="Models\Idea.cs" />
+    <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\RoleIdentifier.cs" />
     <Compile Include="Models\RoleIdentifierDetails.cs" />
     <Compile Include="Models\Student.cs" />
@@ -177,7 +179,8 @@
     <Compile Include="Models\SupervisorUserViewModel.cs" />
     <Compile Include="Models\Ticket.cs" />
     <Compile Include="Models\User.cs" />
-	<Compile Include="Models\Proposal.cs" />
+    <Compile Include="Models\Proposal.cs" />
+    <Compile Include="Models\ViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -229,11 +232,13 @@
     <Content Include="Views\Supervisor\Index.cshtml" />
     <Content Include="Views\Student\Edit.cshtml" />
     <Content Include="Views\Supervisor\Edit.cshtml" />
-	<Content Include="Views\Proposal\Create.cshtml" />
+    <Content Include="Views\Proposal\Create.cshtml" />
     <Content Include="Views\Proposal\Index.cshtml" />
+    <Content Include="Views\Student\Notifications.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Notification\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
