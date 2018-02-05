@@ -161,21 +161,35 @@ namespace FH_Kiel_Ticketing_App.Controllers
         {
             if (IsLoggedIn() && IsAuthorized())
             {
-                int userID = GetUserID();
-
-                var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
-                var notifications = db.Notification.Where(n => 
-                        n.User.recordID == userID && 
-                        n.isRead == false).ToList();
-                var justChecking = user.Notification.Count();
-
-                var viewModel = new StudentNotificationViewModel
+                using (TicketingApp db = new TicketingApp())
                 {
-                    user = user,
-                    notifications = notifications
-                };
+                    int userID = GetUserID();
 
-                return View(viewModel);
+                    var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
+                    var unreadNotifications = db.Notification.Where(n =>
+                            n.User.recordID == userID &&
+                            n.isRead == false).ToList();
+                    var readNotifications = db.Notification.Where(n =>
+                            n.User.recordID == userID &&
+                            n.isRead == true).ToList();
+
+                    var viewModel = new StudentNotificationViewModel
+                    {
+                        user = user,
+                        unreadNotifications = unreadNotifications,
+                        readNotifications = readNotifications
+                    };
+
+                    db.Configuration.ValidateOnSaveEnabled = false;
+                    foreach (var item in user.Notification)
+                    {
+                        if (item.isRead == false)
+                            item.isRead = true;
+                    }
+                    db.SaveChanges();
+                    return View(viewModel);
+                }
+
             }
             else
             {
@@ -197,7 +211,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                     TempData["returnURLController"] = "User";
                     return RedirectToAction("Create", "Notification", new { area = "" });
                 }
-                    
+
             }
             else
             {

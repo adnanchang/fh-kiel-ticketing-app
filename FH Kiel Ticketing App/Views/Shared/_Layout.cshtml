@@ -8,26 +8,26 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <style type="text/css">
-        /*
-            I am going to overwrite css rather than
-            messing up with the original bootstrap file
-        */
-        /*.navbar-inverse {
-            background-color: #3C5984; /*Fachhochschules Color*/
-            /*border-color: #314A68;
-       }*/
+         /*
+             I am going to overwrite css rather than
+             messing up with the original bootstrap file
+         */
+         /*.navbar-inverse {
+             background-color: #3C5984; /*Fachhochschules Color*/
+         /*border-color: #314A68;
+        }*/
 
-            /*.navbar-inverse .navbar-brand {
-                color: white;
-            }*/
+         /*.navbar-inverse .navbar-brand {
+                 color: white;
+             }*/
 
-            /*.navbar-inverse .navbar-text {
-                color: white;
-            }*/
+         /*.navbar-inverse .navbar-text {
+                 color: white;
+             }*/
 
-        .img {
-            width: 2rem;
-        }
+         .img {
+             width: 2rem;
+         }
     </style>
 </head>
 <body>
@@ -50,20 +50,35 @@
                 @if (Request.Cookies["UserCookie"] != null)
                 {
                     var userRole = Request.Cookies["UserCookie"]["UserRole"];
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a>Hey, @Model.user.firstName</a></li>
-                        <li><a href="/@userRole/Notifications">Notifications <span class="badge">2</span></a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Settings<span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="/@userRole/Edit/@Model.user.recordID">Profile Settings</a></li>
-								<li><a href="/Proposal/Index/">Proposal</a></li>
-                                <li><a href="/User/Logout">Logout</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+                    var notifications = 0;
+                    foreach (var item in Model.user.Notification)
+                    {
+                        if (item.isRead == false)
+                        {
+                            notifications++;
+                        }
+                    }
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a>Hey, @Model.user.firstName</a></li>
+                            <li>
+                                <a href="/@userRole/Notifications">
+                                    Notifications @if (notifications != 0)
+                                    {
+                                        <span class="badge">@notifications</span>
+                                    }
+                                </a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Settings<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="/@userRole/Edit/@Model.user.recordID">Profile Settings</a></li>
+                                    <li><a href="/Proposal/Index/">Proposal</a></li>
+                                    <li><a href="/User/Logout">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 }
             </div>
 

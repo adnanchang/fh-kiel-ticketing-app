@@ -12,6 +12,7 @@ namespace FH_Kiel_Ticketing_App.Models
 
     public class StudentNotificationViewModel : ViewModelBase
     {
-        public List<Notification> notifications { get; set; }
+        public List<Notification> readNotifications { get; set; }
+        public List<Notification> unreadNotifications { get; set; }
     }
 }
