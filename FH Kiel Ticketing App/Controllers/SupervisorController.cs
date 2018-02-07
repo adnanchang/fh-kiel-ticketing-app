@@ -10,24 +10,22 @@ namespace FH_Kiel_Ticketing_App.Controllers
 {
     public class SupervisorController : Controller
     {
+        TicketingApp db = new TicketingApp();
         // GET: Supervisor
         public ActionResult Index()
         {
             if (IsLoggedIn() && IsAuthorized())
             {
                 int userID = GetUserID();
-                using (TicketingApp db = new TicketingApp())
-                {
-                    var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
-                    var supervisor = db.Supervisor.Where(s => s.recordID == userID).FirstOrDefault();
+                var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
+                var supervisor = db.Supervisor.Where(s => s.recordID == userID).FirstOrDefault();
 
-                    var supervisorUser = new SupervisorUserViewModel
-                    {
-                        user = user,
-                        supervisor = supervisor
-                    };
-                    return View(supervisorUser);
-                }
+                var supervisorUser = new SupervisorUserViewModel
+                {
+                    user = user,
+                    supervisor = supervisor
+                };
+                return View(supervisorUser);
             }
             else
             {
@@ -68,24 +66,21 @@ namespace FH_Kiel_Ticketing_App.Controllers
         {
             if (IsLoggedIn() && IsAuthorized())
             {
-                using (TicketingApp db = new TicketingApp())
-                {
-                    var user = db.User.Where(u => u.recordID == id).FirstOrDefault();
-                    var supervisor = db.Supervisor.Where(s => s.recordID == id).FirstOrDefault();
-                    var fields = db.Fields.ToList();
-                    var supervisorFields = db.Fields.Where(f => f.Supervisor.Any(s => s.recordID == id)).ToList();
-                    var selectedFields = supervisorFields.Select(x => x.recordID).ToArray();
+                var user = db.User.Where(u => u.recordID == id).FirstOrDefault();
+                var supervisor = db.Supervisor.Where(s => s.recordID == id).FirstOrDefault();
+                var fields = db.Fields.ToList();
+                var supervisorFields = db.Fields.Where(f => f.Supervisor.Any(s => s.recordID == id)).ToList();
+                var selectedFields = supervisorFields.Select(x => x.recordID).ToArray();
 
-                    var supervisorUser = new SupervisorUserFieldViewModel
-                    {
-                        user = user,
-                        supervisor = supervisor,
-                        SupervisorFields = supervisorFields,
-                        AllFields = fields,
-                        selectedFields = selectedFields
-                    };
-                    return View(supervisorUser);
-                }
+                var supervisorUser = new SupervisorUserFieldViewModel
+                {
+                    user = user,
+                    supervisor = supervisor,
+                    SupervisorFields = supervisorFields,
+                    AllFields = fields,
+                    selectedFields = selectedFields
+                };
+                return View(supervisorUser);
             }
             else
             {
