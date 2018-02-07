@@ -16,6 +16,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
         {
             if (IsLoggedIn() && IsAuthorized())
             {
+
                 int userID = GetUserID();
 
                 var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
@@ -37,6 +38,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 }
 
                 return View(studentUser);
+
             }
             else
             {
@@ -77,18 +79,16 @@ namespace FH_Kiel_Ticketing_App.Controllers
         {
             if (IsLoggedIn() && IsAuthorized())
             {
-                using (TicketingApp db = new TicketingApp())
-                {
-                    var user = db.User.Where(u => u.recordID == id).FirstOrDefault();
-                    var student = db.Student.Where(s => s.recordID == id).FirstOrDefault();
 
-                    var studentUser = new StudentUserViewModel
-                    {
-                        user = user,
-                        student = student
-                    };
-                    return View(studentUser);
-                }
+                var user = db.User.Where(u => u.recordID == id).FirstOrDefault();
+                var student = db.Student.Where(s => s.recordID == id).FirstOrDefault();
+
+                var studentUser = new StudentUserViewModel
+                {
+                    user = user,
+                    student = student
+                };
+                return View(studentUser);
             }
             else
             {
@@ -161,34 +161,32 @@ namespace FH_Kiel_Ticketing_App.Controllers
         {
             if (IsLoggedIn() && IsAuthorized())
             {
-                using (TicketingApp db = new TicketingApp())
+
+                int userID = GetUserID();
+
+                var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
+                var unreadNotifications = db.Notification.Where(n =>
+                        n.User.recordID == userID &&
+                        n.isRead == false).ToList();
+                var readNotifications = db.Notification.Where(n =>
+                        n.User.recordID == userID &&
+                        n.isRead == true).ToList();
+
+                var viewModel = new StudentNotificationViewModel
                 {
-                    int userID = GetUserID();
+                    user = user,
+                    unreadNotifications = unreadNotifications,
+                    readNotifications = readNotifications
+                };
 
-                    var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
-                    var unreadNotifications = db.Notification.Where(n =>
-                            n.User.recordID == userID &&
-                            n.isRead == false).ToList();
-                    var readNotifications = db.Notification.Where(n =>
-                            n.User.recordID == userID &&
-                            n.isRead == true).ToList();
-
-                    var viewModel = new StudentNotificationViewModel
-                    {
-                        user = user,
-                        unreadNotifications = unreadNotifications,
-                        readNotifications = readNotifications
-                    };
-
-                    db.Configuration.ValidateOnSaveEnabled = false;
-                    foreach (var item in user.Notification)
-                    {
-                        if (item.isRead == false)
-                            item.isRead = true;
-                    }
-                    db.SaveChanges();
-                    return View(viewModel);
+                db.Configuration.ValidateOnSaveEnabled = false;
+                foreach (var item in user.Notification)
+                {
+                    if (item.isRead == false)
+                        item.isRead = true;
                 }
+                db.SaveChanges();
+                return View(viewModel);
 
             }
             else
