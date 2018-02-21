@@ -25,7 +25,7 @@
                 {
                     <div class="alert alert-dismissible alert-info">
                         <strong>Hey there!</strong> Looks like you have no tickets at the moment. Why don't you get started?
-                        <a href="#" class="btn btn-primary">Primary</a>
+                        <a href="/Proposal/Index" class="btn btn-primary">Sumbit Proposal</a>
                     </div>
                 }
                 else
@@ -42,7 +42,7 @@
                             <tr>
                                 <td>@Model.ticket.title</td>
                                 <td>@Model.ticket.status</td>
-                                <td><a href="#">View</a></td>
+                                <td><a href="/Ticket/Ticket/@Model.ticket.recordID">View</a></td>
                             </tr>
                         </tbody>
                     </table>

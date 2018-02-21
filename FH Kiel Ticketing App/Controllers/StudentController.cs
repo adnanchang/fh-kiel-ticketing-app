@@ -21,7 +21,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
 
                 var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
                 var student = db.Student.Where(s => s.recordID == userID).FirstOrDefault();
-                var ticket = db.Ticket.Where(t => t.Contributors.Any(c => c.User.recordID == userID)).FirstOrDefault();
+                var ticket = db.Ticket.FirstOrDefault();
                 var idea = db.Idea.Where(i => i.User.recordID != userID).ToList();
 
                 var studentUser = new StudentUserViewModel
@@ -48,6 +48,12 @@ namespace FH_Kiel_Ticketing_App.Controllers
 
         // GET: Student/Details/5
         public ActionResult Details(int id)
+        {
+            return View();
+        }
+        //Get: Student/Ticket/
+
+            public ActionResult Ticket()
         {
             return View();
         }

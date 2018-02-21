@@ -26,6 +26,12 @@ namespace FH_Kiel_Ticketing_App.Models
 
         public virtual User User { get; set; } //The person who created the idea
 
+        [Required(ErrorMessage = "The Idea needs a field")]
+        [DisplayName("Fields")]
+        public string field { get; set; }
+
+        
+
         //The connection to proposal file goes here
     }
 }

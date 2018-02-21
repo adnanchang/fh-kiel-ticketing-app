@@ -20,5 +20,8 @@ namespace FH_Kiel_Ticketing_App.Models
         [Required(ErrorMessage = "Status of the member is required")]
         [DisplayName("Status")]
         public string status { get; set; }
+        [Required]
+        public string Role { get; set; }
+        public int FuckYou { get; set; }
     }
 }

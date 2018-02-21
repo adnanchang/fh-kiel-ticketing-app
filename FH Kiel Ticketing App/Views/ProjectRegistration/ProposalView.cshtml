@@ -1,0 +1,94 @@
+﻿@model FH_Kiel_Ticketing_App.Models.Proposal
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Proposal</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.nameOfProject, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.nameOfProject, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ticketing App" } })
+            @Html.ValidationMessageFor(model => model.nameOfProject, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.abstrac, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.abstrac, 4, 40, new { @placeholder = "A platform for Fachhochschule Kiel students where they can offer help to other students who need help with any subjects they are having difficulties with. Along with that, each student can also view their classes for the semester based on the courses using the system’s automated algorithm", htmlAttributes = new { @style = "width: 450px;", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.abstrac, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.introduction, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.introduction, 4, 40, new { @placeholder = "The purpose of this document is to give an abstract level idea about the basic needs and requirements for Project Koh. The general idea of what the system is supposed to do and offer. Furthermore, how the application will achieve its main goal. This document does not contain complete information for the Project and is only to provide an overview of the idea that the authors would like to work on therefore it shall be named afterwards when the formal proposal is constructed.", htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.introduction, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.overallDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.overallDescription, 4, 40, new { @placeholder = "This system will be completely web-based, linking to the database and the web server from a standard web browser. An Internet connection is necessary to access the system.", htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.overallDescription, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.functionalRequirements, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.functionalRequirements, 4, 40, new { @placeholder = "Functional requirements of Project Koh are as follows:1.System shall allow users to post questions regarding their problems.2.System shall let users post answers against questions asked.3.System shall let users send personal messages to other users.4.System shall allow users to maintain a profile.", htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.functionalRequirements, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.nonFunctionalRequirements, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.nonFunctionalRequirements, 4, 40, new { @placeholder = "The website must be compatible with some of the most commonly used web browsers like Firefox, Google Chrome, and Internet Explorer. The user interface must be readable and well organized.", htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.nonFunctionalRequirements, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.projectTechnologies, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.projectTechnologies, 4, 40, new { @placeholder = "The system may use the following technologies: 1.Programming Languages: C# / Javascript2.UML Modeling: Microsoft Visio3.Development Environment: Microsoft Visual Studio / Webstorm / IntelliJ4.Database: Microsoft SQL Server(MS SQL) / MongoDB5.Software Development Cycle: V - Model", htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.projectTechnologies, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.result, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.result, 4, 40, new { @placeholder = "Each year there are new students in different program and these students usually face a lot of different challenges. These students are usually from different educational backgrounds and some may be able to perform better than the others based on their area of interest or expertise. Apart from this, the semester plan provided is split into five (one compulsory, four electives) PDF documents. It is a strain at the start of the semester to go through all five of these documents and get familiar with your schedule. This is where Project Koh comes in and attempts to provide a solution. It will be an application that helps student connect with each other and help each other out. The application will act as a separate community where the students can seek out for help or offer help to other students if need be. Furthermore, the application will hold your own profile where you can see your class schedule generated by the system. The system will also manage to send in emails for classes as a reminder to the users.", htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.result, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+      Select your SuperVisor
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.result, 4, 40, new { @placeholder = "Each year there are new students in different program and these students usually face a lot of different challenges. These students are usually from different educational backgrounds and some may be able to perform better than the others based on their area of interest or expertise. Apart from this, the semester plan provided is split into five (one compulsory, four electives) PDF documents. It is a strain at the start of the semester to go through all five of these documents and get familiar with your schedule. This is where Project Koh comes in and attempts to provide a solution. It will be an application that helps student connect with each other and help each other out. The application will act as a separate community where the students can seek out for help or offer help to other students if need be. Furthermore, the application will hold your own profile where you can see your class schedule generated by the system. The system will also manage to send in emails for classes as a reminder to the users.", htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.result, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

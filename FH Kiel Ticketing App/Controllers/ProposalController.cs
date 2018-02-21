@@ -9,24 +9,49 @@ using iTextSharp.text.pdf;
 using System.Data;
 using System;
 using System.Web;
+using System.Collections.Generic;
 
 namespace FH_Kiel_Ticketing_App.Controllers
 {
     public class ProposalController : Controller
     {
+        TicketingApp db = new TicketingApp();
         public bool IsPostBack { get; private set; }
 
         // GET: Proposal
         public ActionResult Index()
         {
-            using (TicketingApp db = new TicketingApp())
+            if (IsLoggedIn() && IsAuthorized())
             {
-                var proposals = db.Proposal.ToList();
 
-                if (proposals != null)
-                    return View(proposals);
-                else
-                    return View();
+                int userID = GetUserID();
+
+                var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
+                var student = db.Student.Where(s => s.recordID == userID).FirstOrDefault();
+                var ticket = db.Ticket.Where(t => t.recordID > 0).FirstOrDefault();
+                var idea = db.Idea.Where(i => i.User.recordID != userID).ToList();
+                var proposal = db.Proposal.Where(p => p.User.recordID == userID).ToList();
+
+                var proposalUser = new ProposalUserViewModel
+                {
+                    user = user,
+                    student = student,
+                    ticket = ticket,
+                    availableIdeas = idea,
+                    proposals = proposal
+                };
+
+                if (student.matrikelNumber == 0)
+                {
+                    ViewBag.IsDataSet = false;
+                }
+
+                return View(proposalUser);
+
+            }
+            else
+            {
+                return RedirectToAction("Login", "User");
             }
         }
 
@@ -39,29 +64,141 @@ namespace FH_Kiel_Ticketing_App.Controllers
         // GET: Proposal/Create
         public ActionResult Create()
         {
-            return View();
+             if (IsLoggedIn() && IsAuthorized())
+            {
+
+                int userID = GetUserID();
+
+                var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
+                var student = db.Student.Where(s => s.recordID == userID).FirstOrDefault();
+                var ticket = db.Ticket.Where(t => t.recordID > 0).FirstOrDefault();
+                var idea = db.Idea.Where(i => i.User.recordID != userID).ToList();
+                var fields = db.Fields.ToList();
+                var supervisors = db.Supervisor.ToList();
+                var viewModel = new ProposalIdeaFieldViewModel
+                {
+                    user = user,
+                    student = student,
+                    ticket = ticket,
+                    availableIdeas = idea,
+                    AllFields = fields,
+                    AllSupervisor = supervisors
+                };
+
+                if (student.matrikelNumber == 0)
+                {
+                    ViewBag.IsDataSet = false;
+                }
+
+                return View(viewModel);
+
+            }
+            else
+            {
+                return RedirectToAction("Login", "User");
+            }
         }
 
         // POST: Proposal/Create
         [HttpPost]
-        public ActionResult Create(Proposal proposal)
+        public ActionResult Create(ProposalIdeaFieldViewModel proposalIdeaFieldViewModel)
         {
-            try
+            if (IsLoggedIn() && IsAuthorized())
             {
-                // TODO: Add insert logic here
 
-                using (TicketingApp db = new TicketingApp())
-                {
-                    db.Proposal.Add(proposal);
+             
+                    // TODO: Add insert logic here
+
+                    proposalIdeaFieldViewModel.AllFields = db.Fields.ToList();
+                    proposalIdeaFieldViewModel.AllSupervisor = db.Supervisor.ToList();
+
+                    int userID = GetUserID();
+                    var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
+                    var idea = new Idea
+                    {
+                        title = proposalIdeaFieldViewModel.proposal.nameOfProject,
+                        description = proposalIdeaFieldViewModel.proposal.abstrac,
+                        type = proposalIdeaFieldViewModel.idea.type,
+                        field = proposalIdeaFieldViewModel.idea.field,
+                        User = user
+                    };
+                    db.Idea.Add(idea);
                     db.SaveChanges();
-                }
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+
+                    int ideaRecordId = idea.recordID;
+                    var ideaCreated = db.Idea.Where(i => i.recordID == ideaRecordId).FirstOrDefault();
+                    proposalIdeaFieldViewModel.proposal.User = user;
+                    proposalIdeaFieldViewModel.proposal.Idea = ideaCreated;
+                    db.Proposal.Add(proposalIdeaFieldViewModel.proposal);
+
+                db.SaveChanges();
+
+                var now = DateTime.Now;
+                var date = new DateTime(now.Year, now.Month, now.Day,
+                                        now.Hour, now.Minute, now.Second);
+                var ticketStatus = db.TicketStatus.FirstOrDefault();
+                var ticket = new Ticket
+                {
+
+                    
+                    title = proposalIdeaFieldViewModel.proposal.nameOfProject,
+                    status = "Proposal awaiting approval",
+                    timesRejected = 0,
+                    User = user,
+                    idea = ideaCreated,
+                    creationDate = date,
+                    tickettype = "Thesis",
+                    ticketStatus = ticketStatus
+                 
+                    };
+                
+
+               
+
+                    db.Ticket.Add(ticket);
+                    db.SaveChanges();
+                    int ticketRecordId = ticket.recordID;
+                    var ticketCreated = db.Ticket.Where(t => t.recordID == ticketRecordId).FirstOrDefault();
+
+                    string userRole = GetUserRole();
+                    var contributor = new Contributors
+                    {
+                        status = "Pending",
+                        Role = userRole,
+                        User = user,
+                        Ticket = ticketCreated
+
+                    };
+                    db.Contributors.Add(contributor);
+                    db.SaveChanges();
+                    var surperUser = db.User.Where(u => u.recordID == proposalIdeaFieldViewModel.supervisor).FirstOrDefault();
+
+
+
+                    var identifier = surperUser.email;
+                    var surperUserRole = db.RoleIdentifier
+                           .Join(db.RoleIdentifierDetails,
+                               roleIdentifier => roleIdentifier.recordID,
+                               roleIdentifierDetails => roleIdentifierDetails.RoleIdentifier.recordID,
+                               (roleIdentifier, roleIdentifierDetails) => new { RoleIdentifier = roleIdentifier, RoleIdentifierDetails = roleIdentifierDetails })
+                           .Where(roleAndDetails => identifier.Contains(roleAndDetails.RoleIdentifierDetails.identifier)).FirstOrDefault();
+
+                    contributor.User = surperUser;
+                    contributor.Role = surperUserRole.RoleIdentifier.role;
+                    db.Contributors.Add(contributor);
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+          
+                    
+                   
+            
         }
+            else
+            {
+                return RedirectToAction("Login", "User");
+    }
+}
 
         // GET: Proposal/Edit/5
         public ActionResult Edit(int id)
@@ -106,16 +243,71 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 return View();
             }
         }
+        [NonAction]
+        public bool IsLoggedIn()
+        {
+            if (Request.Cookies["UserCookie"] != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        [NonAction]
+        public bool IsAuthorized()
+        {
+            if (Request.Cookies["UserCookie"] != null)
+            {
+                if (Request.Cookies["UserCookie"]["UserRole"].ToString() == "Student")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        [NonAction]
+        public int GetUserID()
+        {
+            int userID = -1;
+            if (Request.Cookies["UserCookie"] != null)
+            {
+                userID = Convert.ToInt32(Request.Cookies["UserCookie"]["UserID"].ToString());
+            }
+            return userID;
+        }
+
+        [NonAction]
+        public string GetUserRole()
+        {
+            string userRole = null;
+            if (Request.Cookies["UserCookie"] != null)
+            {
+                userRole = Request.Cookies["UserCookie"]["UserRole"].ToString();
+            }
+            return userRole;
+        }
 
 
         // GET: Proposal/ExportPDF
-        public ActionResult ExportPDF(int recordID)
+        public ActionResult ExportPDF(int id)
         {
             Proposal proposals;
+            Idea ideas;
 
             using (TicketingApp db = new TicketingApp())
             {
-                proposals = db.Proposal.Where(u => u.recordID == recordID).FirstOrDefault();
+                proposals = db.Proposal.Where(u => u.recordID == id).FirstOrDefault();
+                ideas = db.Idea.Where(i => i.recordID == proposals.Idea.recordID).FirstOrDefault();
 
             }
 
@@ -151,6 +343,9 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 phrase.Add(new Chunk("Abstract :\n", FontFactory.GetFont("Arial", 16, Font.BOLD, BaseColor.BLACK)));
                 phrase.Add(new Chunk(proposals.abstrac + "\n\n", FontFactory.GetFont("Arial", 14, Font.NORMAL, BaseColor.BLACK)));
 
+                phrase.Add(new Chunk("Proposal Type :\n", FontFactory.GetFont("Arial", 16, Font.BOLD, BaseColor.BLACK)));
+                phrase.Add(new Chunk(ideas.type + "\n\n", FontFactory.GetFont("Arial", 14, Font.NORMAL, BaseColor.BLACK)));
+
 
                 phrase.Add(new Chunk("Introduction :\n", FontFactory.GetFont("Arial", 16, Font.BOLD, BaseColor.BLACK)));
                 phrase.Add(new Chunk(proposals.introduction + "\n\n", FontFactory.GetFont("Arial", 14, Font.NORMAL, BaseColor.BLACK)));
@@ -166,6 +361,9 @@ namespace FH_Kiel_Ticketing_App.Controllers
 
                 phrase.Add(new Chunk("Non-Function Requirements :\n", FontFactory.GetFont("Arial", 16, Font.BOLD, BaseColor.BLACK)));
                 phrase.Add(new Chunk(proposals.nonFunctionalRequirements + "\n\n", FontFactory.GetFont("Arial", 14, Font.NORMAL, BaseColor.BLACK)));
+
+                phrase.Add(new Chunk("Project Technologies :\n", FontFactory.GetFont("Arial", 16, Font.BOLD, BaseColor.BLACK)));
+                phrase.Add(new Chunk(proposals.projectTechnologies + "\n\n", FontFactory.GetFont("Arial", 14, Font.NORMAL, BaseColor.BLACK)));
 
 
                 phrase.Add(new Chunk("Result: :\n", FontFactory.GetFont("Arial", 16, Font.BOLD, BaseColor.BLACK)));

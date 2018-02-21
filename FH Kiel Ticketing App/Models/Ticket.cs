@@ -10,7 +10,7 @@ namespace FH_Kiel_Ticketing_App.Models
 {
     public class Ticket
     {
-        [Key, ForeignKey("Idea")]
+        [Key]
         [Required]
         public int recordID { get; set; }
 
@@ -23,10 +23,15 @@ namespace FH_Kiel_Ticketing_App.Models
 
         [DisplayName("Times Ticket Rejected")]
         public int timesRejected { get; set; }
+        public string tickettype { get; set; } //Thesis, project,
 
-        public virtual ICollection<Contributors> Contributors { get; set; }
+        public DateTime creationDate { get; set; }
+       
+        public virtual Idea idea { get; set; }
+        public virtual User User { get; set; }
+        public virtual TicketStatus ticketStatus { get; set; }
+        
 
-        public virtual Idea Idea { get; set; }
 
     }
 }

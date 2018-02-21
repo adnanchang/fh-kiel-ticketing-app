@@ -17,9 +17,11 @@ namespace FH_Kiel_Ticketing_App.Context
         public DbSet<Idea> Idea { get; set; }
         public DbSet<Fields> Fields { get; set; }
         public DbSet<Ticket> Ticket { get; set; }
-        public DbSet<Contributors> Contributor { get; set; }
+        public DbSet<Contributors> Contributors { get; set; }
 		public DbSet<Proposal> Proposal { get; set; }
         public DbSet<Notification> Notification { get; set; }
+        public DbSet<TicketStatus> TicketStatus { get; set; }
+        public DbSet<Comments> Comments { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

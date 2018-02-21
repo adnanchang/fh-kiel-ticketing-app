@@ -1,0 +1,46 @@
+﻿@model IEnumerable<FH_Kiel_Ticketing_App.Models.Ticket>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.timesRejected)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.timesRejected)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.recordID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.recordID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.recordID })
+        </td>
+    </tr>
+}
+
+</table>
