@@ -243,16 +243,28 @@ namespace FH_Kiel_Ticketing_App.Controllers
             ModelState.Remove("User.email");
             ModelState.Remove("User.password");
             ModelState.Remove("User.confirmPassword");
-            if (ModelState.IsValid)
+            try
             {
-                int userID = GetUserID();
-                var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
+                if (ModelState.IsValid)
+                {
+                    int userID = GetUserID();
+                    var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
 
-                idea.User = user;
-                db.Idea.Add(idea);
-                db.SaveChanges();
+                    idea.User = user;
+                    db.Idea.Add(idea);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch (Exception)
+            {
+                ViewBag.Message = "Something doesn't look right. Are you sure you filled the form correctly?";
+                return View();
+            }
+            
+            
         }
 
         [NonAction]
