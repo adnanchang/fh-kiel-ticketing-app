@@ -15,4 +15,11 @@ namespace FH_Kiel_Ticketing_App.Models
         public List<Notification> readNotifications { get; set; }
         public List<Notification> unreadNotifications { get; set; }
     }
+
+    public class SupervisorNotificationViewModel : ViewModelBase
+    {
+        public List<Notification> readNotifications { get; set; }
+        public List<Notification> unreadNotifications { get; set; }
+    }
+
 }

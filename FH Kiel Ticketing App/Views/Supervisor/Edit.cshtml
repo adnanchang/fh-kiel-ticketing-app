@@ -1,7 +1,7 @@
 ﻿@model FH_Kiel_Ticketing_App.Models.SupervisorUserFieldViewModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Profile Settings";
 }
 
 <h2>Edit</h2>
@@ -15,14 +15,25 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.supervisor.recordID)
+        @Html.HiddenFor(model => model.user.recordID)
 
         <div class="form-group">
             @Html.LabelFor(model => model.supervisor.Fields, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                    @Html.CheckBoxListFor(model => model.selectedFields, model => model.AllFields, x => x.recordID, x => x.field, model => model.SupervisorFields, MvcCheckBoxList.Model.Position.Vertical)
+                @Html.CheckBoxListFor(model => model.selectedFields, model => model.AllFields, x => x.recordID, x => x.field, model => model.SupervisorFields, MvcCheckBoxList.Model.Position.Vertical)
             </div>
         </div>
 
+
+        <hr />
+        <h4>If you don't want us to bother you with email notifications</h4>
+        <div class="form-group">
+            @Html.LabelFor(model => model.user.emailNotification, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.user.emailNotification)
+                @Html.ValidationMessageFor(model => model.user.emailNotification, "", new { @class = "text-danger" })
+            </div>
+        </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-primary" />

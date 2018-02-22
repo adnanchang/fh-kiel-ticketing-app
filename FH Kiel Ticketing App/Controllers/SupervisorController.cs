@@ -70,6 +70,10 @@ namespace FH_Kiel_Ticketing_App.Controllers
         // GET: Supervisor/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
             if (IsLoggedIn() && IsAuthorized())
             {
                 var user = db.User.Where(u => u.recordID == id).FirstOrDefault();
@@ -101,23 +105,29 @@ namespace FH_Kiel_Ticketing_App.Controllers
             try
             {
                 // TODO: Add update logic here
+                ModelState.Remove("User.firstName");
+                ModelState.Remove("User.lastName");
+                ModelState.Remove("User.email");
+                ModelState.Remove("User.password");
+                ModelState.Remove("User.confirmPassword");
                 if (ModelState.IsValid)
                 {
-                    using (TicketingApp db = new TicketingApp())
+                    db.Configuration.ValidateOnSaveEnabled = false;
+                    var supervisor = db.Supervisor.Where(s => s.recordID == supervisorUser.supervisor.recordID).FirstOrDefault();
+                    var user = db.User.Where(u => u.recordID == supervisorUser.user.recordID).FirstOrDefault();
+                    var fields = new List<Fields>();
+
+                    user.emailNotification = supervisorUser.user.emailNotification;
+                    foreach (int item in supervisorUser.selectedFields)
                     {
-                        var supervisor = db.Supervisor.Where(s => s.recordID == supervisorUser.supervisor.recordID).FirstOrDefault();
-                        var fields = new List<Fields>();
-                        foreach (int item in supervisorUser.selectedFields)
-                        {
-                            fields.Add(db.Fields.Where(f => f.recordID == item).FirstOrDefault());
-                        }
-                        supervisor.Fields.Clear();
-                        foreach (var item in fields)
-                        {
-                            supervisor.Fields.Add(item);
-                        }
-                        db.SaveChanges();
+                        fields.Add(db.Fields.Where(f => f.recordID == item).FirstOrDefault());
                     }
+                    supervisor.Fields.Clear();
+                    foreach (var item in fields)
+                    {
+                        supervisor.Fields.Add(item);
+                    }
+                    db.SaveChanges();
                 }
                 return RedirectToAction("Index");
             }
@@ -146,6 +156,67 @@ namespace FH_Kiel_Ticketing_App.Controllers
             catch
             {
                 return View();
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Notifications()
+        {
+            if (IsLoggedIn() && IsAuthorized())
+            {
+
+                int userID = GetUserID();
+
+                var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
+                var unreadNotifications = db.Notification.Where(n =>
+                        n.User.recordID == userID &&
+                        n.isRead == false).ToList();
+                var readNotifications = db.Notification.Where(n =>
+                        n.User.recordID == userID &&
+                        n.isRead == true).ToList();
+
+                var viewModel = new SupervisorNotificationViewModel
+                {
+                    user = user,
+                    unreadNotifications = unreadNotifications,
+                    readNotifications = readNotifications
+                };
+
+                db.Configuration.ValidateOnSaveEnabled = false;
+                foreach (var item in user.Notification)
+                {
+                    if (item.isRead == false)
+                        item.isRead = true;
+                }
+                db.SaveChanges();
+                return View(viewModel);
+
+            }
+            else
+            {
+                return RedirectToAction("Login", "User");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Notifications(FormCollection formCollection)
+        {
+            if (IsLoggedIn() && IsAuthorized())
+            {
+                using (TicketingApp db = new TicketingApp())
+                {
+                    TempData["message"] = "This is a test notification sent at " + DateTime.Now.ToLongTimeString();
+                    TempData["targetURL"] = "/User/Login";
+                    TempData["users"] = db.User.ToList();
+                    TempData["returnURLName"] = "Login";
+                    TempData["returnURLController"] = "User";
+                    return RedirectToAction("Create", "Notification", new { area = "" });
+                }
+
+            }
+            else
+            {
+                return RedirectToAction("Login", "User");
             }
         }
 

@@ -83,6 +83,10 @@ namespace FH_Kiel_Ticketing_App.Controllers
         // GET: Student/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
             if (IsLoggedIn() && IsAuthorized())
             {
 

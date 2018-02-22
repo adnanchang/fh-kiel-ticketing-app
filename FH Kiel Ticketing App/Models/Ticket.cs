@@ -12,6 +12,7 @@ namespace FH_Kiel_Ticketing_App.Models
     {
         [Key]
         [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int recordID { get; set; }
 
         [Required(ErrorMessage = "The ticket needs a title")]
