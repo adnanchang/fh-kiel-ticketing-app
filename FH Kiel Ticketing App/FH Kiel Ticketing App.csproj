@@ -215,10 +215,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201802131928329_After Fucked up.cs" />
-    <Compile Include="Migrations\201802131928329_After Fucked up.Designer.cs">
-      <DependentUpon>201802131928329_After Fucked up.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Comments.cs" />
     <Compile Include="Models\Contributors.cs" />
@@ -329,11 +325,6 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201802131928329_After Fucked up.resx">
-      <DependentUpon>201802131928329_After Fucked up.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
