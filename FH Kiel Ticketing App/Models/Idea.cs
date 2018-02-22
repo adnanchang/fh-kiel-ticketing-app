@@ -19,9 +19,11 @@ namespace FH_Kiel_Ticketing_App.Models
 
         [Required(ErrorMessage = "The Idea needs a small description")]
         [DisplayName("Description")]
+        [DataType(DataType.MultilineText)]
         public string description { get; set; }
 
         [Required(ErrorMessage = "The Idea needs a type")]
+        [DisplayName("Type")]
         public string type { get; set; }
 
         public virtual User User { get; set; } //The person who created the idea

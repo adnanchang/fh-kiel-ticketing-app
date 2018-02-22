@@ -27,5 +27,10 @@ namespace FH_Kiel_Ticketing_App.Models
         public List<Fields> AllFields { get; set; }
         public Idea Idea { get; set; }
     }
+    
+    public class IdeaDetailsViewModel : ViewModelBase
+    {
+        public Idea Idea { get; set; }
+    }
 
 }

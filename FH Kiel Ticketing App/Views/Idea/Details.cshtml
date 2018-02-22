@@ -1,0 +1,46 @@
+﻿@model FH_Kiel_Ticketing_App.Models.IdeaDetailsViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Idea</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Idea.title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Idea.title)
+        </dd>
+        <hr />
+        <dt>
+            @Html.DisplayNameFor(model => model.Idea.description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Idea.description)
+        </dd>
+        <hr />
+        <dt>
+            @Html.DisplayNameFor(model => model.Idea.type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Idea.type)
+        </dd>
+        <hr />
+        <dt>
+            @Html.DisplayNameFor(model => model.Idea.field)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Idea.field)
+        </dd>
+
+    </dl>
+</div>

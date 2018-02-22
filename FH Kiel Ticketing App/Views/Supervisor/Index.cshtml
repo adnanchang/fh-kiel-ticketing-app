@@ -16,8 +16,7 @@
                 @if (Model.ticket == null)
                 {
                     <div class="alert alert-dismissible alert-info">
-                        <strong>Hey there!</strong> Looks like you have no tickets at the moment. Why don't you get started?
-                        <a href="/Proposal/Index" class="btn btn-primary">Sumbit Proposal</a>
+                        <strong>Hey there!</strong> Looks like you have no tickets at the moment.
                     </div>
                 }
                 else
@@ -46,15 +45,15 @@
     <div class="row">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Available Ideas</h3>
+                <h3 class="panel-title">Your Ideas</h3>
             </div>
             <div class="panel-body">
-                @if (Model.availableIdeas == null)
+                @if (Model.availableIdeas == null || Model.availableIdeas.Count == 0)
                 {
                     <div class="alert alert-dismissible alert-info">
                         <strong>Hey there!</strong> Looks like you there are no available ideas. Why don't you make one?
-                        <a href="#" class="btn btn-primary">Primary</a>
                     </div>
+                    <a href="/Supervisor/Idea" class="btn btn-primary">Create</a>
                 }
                 else
                 {
@@ -72,7 +71,15 @@
                             {
                                 <tr>
                                     <td>@item.title</td>
-                                    <td>@item.description</td>
+                                    @if (item.description.Count() > 100)
+                                    {
+                                        string shortString = item.description.Substring(0, 100) + "....";
+                                        <td>@shortString</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.description</td>
+                                    }
                                     <td>@item.type</td>
                                     @if (item.User.recordID == Model.user.recordID)
                                     {
@@ -82,7 +89,7 @@
                                     {
                                         <td>@item.User.firstName</td>
                                     }
-                                    <td><a href="#">View</a></td>
+                                    <td><a href="/Idea/Details/@item.recordID">View</a></td>
                                 </tr>
                             }
                         </tbody>
