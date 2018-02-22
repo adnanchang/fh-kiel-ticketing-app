@@ -308,6 +308,7 @@
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Ticket\Ticket.cshtml" />
     <Content Include="Views\Supervisor\Notifications.cshtml" />
+    <Content Include="Views\Supervisor\Idea.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

@@ -74,7 +74,14 @@
                                     <td>@item.title</td>
                                     <td>@item.description</td>
                                     <td>@item.type</td>
-                                    <td>@item.User.firstName</td>
+                                    @if (item.User.recordID == Model.user.recordID)
+                                    {
+                                        <td>You</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.User.firstName</td>
+                                    }
                                     <td><a href="#">View</a></td>
                                 </tr>
                             }

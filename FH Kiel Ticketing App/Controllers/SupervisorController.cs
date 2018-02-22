@@ -21,7 +21,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 var supervisor = db.Supervisor.Where(s => s.recordID == userID).FirstOrDefault();
                 var tickets = db.Ticket.Where(t => t.recordID > 0).ToList();
                 var ticket = db.Ticket.Where(t => t.recordID > 0).FirstOrDefault();
-                var idea = db.Idea.Where(i => i.User.recordID != userID).ToList();
+                var idea = db.Idea.Where(i => i.User.recordID == userID).ToList();
 
                 var sprTicketView = new SuperVisorTicketViewModel
                 {
@@ -218,6 +218,41 @@ namespace FH_Kiel_Ticketing_App.Controllers
             {
                 return RedirectToAction("Login", "User");
             }
+        }
+
+        [HttpGet]
+        public ActionResult Idea()
+        {
+            int id = GetUserID();
+            var user = db.User.Where(u => u.recordID == id).FirstOrDefault();
+            var fields = db.Fields.ToList();
+
+            var supervisorIdeaCreateViewModel = new SupervisorIdeaCreateViewModel
+            {
+                user = user,
+                AllFields = fields
+            };
+            return View(supervisorIdeaCreateViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Idea(Idea idea)
+        {
+            ModelState.Remove("User.firstName");
+            ModelState.Remove("User.lastName");
+            ModelState.Remove("User.email");
+            ModelState.Remove("User.password");
+            ModelState.Remove("User.confirmPassword");
+            if (ModelState.IsValid)
+            {
+                int userID = GetUserID();
+                var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
+
+                idea.User = user;
+                db.Idea.Add(idea);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
         }
 
         [NonAction]
