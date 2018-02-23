@@ -21,7 +21,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 var supervisor = db.Supervisor.Where(s => s.recordID == userID).FirstOrDefault();
                 var tickets = db.Ticket.Where(t => t.recordID > 0).ToList();
                 var ticket = db.Ticket.Where(t => t.recordID > 0).FirstOrDefault();
-                var idea = db.Idea.Where(i => i.User.recordID == userID).ToList();
+                var idea = db.Idea.Where(i => i.User.recordID == userID).ToList().Take(5).ToList();
 
                 var sprTicketView = new SuperVisorTicketViewModel
                 {

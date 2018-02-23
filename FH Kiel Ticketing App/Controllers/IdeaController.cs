@@ -1,5 +1,6 @@
 ﻿using FH_Kiel_Ticketing_App.Context;
 using FH_Kiel_Ticketing_App.Models;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,38 @@ namespace FH_Kiel_Ticketing_App.Controllers
     {
         TicketingApp db = new TicketingApp();
         // GET: Idea
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            return View();
+            if (IsLoggedIn())
+            {
+                string userRole = GetUserRole();
+                int userId = GetUserID();
+                var user = db.User.Where(u => u.recordID == userId).FirstOrDefault();
+                IdeaListViewModel ideaList = null;
+                int pageSize = 7;
+                int pageNumber = (page ?? 1);
+                if (userRole == "Student")
+                {
+                    var ideas = db.Idea.Where(i => i.User.recordID != userId).ToList();
+
+                    ideaList = new IdeaListViewModel
+                    {
+                        user = user,
+                        ideas = ideas.ToPagedList(pageNumber, pageSize)
+                    };
+                }
+                else if (userRole == "Supervisor")
+                {
+                    var ideas = db.Idea.Where(i => i.User.recordID == userId).ToList();
+                    ideaList = new IdeaListViewModel
+                    {
+                        user = user,
+                        ideas = ideas.ToPagedList(pageNumber, pageSize)
+                    };
+                }
+                return View(ideaList);
+            }
+            return RedirectToAction("Login", "User");
         }
 
         // GET: Idea/Details/5
@@ -25,7 +55,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 return RedirectToAction("Login", "User");
             }
 
-            if (IsLoggedIn() && IsAuthorized())
+            if (IsLoggedIn())
             {
                 int userId = GetUserID();
                 var user = db.User.Where(u => u.recordID == userId).FirstOrDefault();
@@ -45,7 +75,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
             {
                 return RedirectToAction("Login", "User");
             }
-            
+
         }
 
         // GET: Idea/Create
@@ -127,25 +157,6 @@ namespace FH_Kiel_Ticketing_App.Controllers
             }
         }
 
-        [NonAction]
-        public bool IsAuthorized()
-        {
-            if (Request.Cookies["UserCookie"] != null)
-            {
-                if (Request.Cookies["UserCookie"]["UserRole"].ToString() == "Supervisor")
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         [NonAction]
         public int GetUserID()

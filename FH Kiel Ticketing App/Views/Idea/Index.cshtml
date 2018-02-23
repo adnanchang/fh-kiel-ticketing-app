@@ -1,0 +1,51 @@
+﻿@model FH_Kiel_Ticketing_App.Models.IdeaListViewModel
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Ideas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<div class="container">
+    <table class="table table-striped table-hover ">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Created By</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ideas)
+            {
+                <tr>
+                    <td>@item.title</td>
+                    @if (item.description.Count() > 100)
+                    {
+                        string shortString = item.description.Substring(0, 100) + "....";
+                        <td>@shortString</td>
+                    }
+                    else
+                    {
+                        <td>@item.description</td>
+                    }
+                    <td>@item.type</td>
+                    @if (item.User.recordID == Model.user.recordID)
+                    {
+                        <td>You</td>
+                    }
+                    else
+                    {
+                        <td>@item.User.firstName</td>
+                    }>
+                    <td><a href="/Idea/Details/@item.recordID">View</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    Page @(Model.ideas.PageCount < Model.ideas.PageNumber ? 0 : Model.ideas.PageNumber) of @Model.ideas.PageCount
+    @Html.PagedListPager(Model.ideas, page => Url.Action("Index", new { page }))
+</div>
+

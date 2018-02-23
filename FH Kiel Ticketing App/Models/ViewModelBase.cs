@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -31,6 +32,11 @@ namespace FH_Kiel_Ticketing_App.Models
     public class IdeaDetailsViewModel : ViewModelBase
     {
         public Idea Idea { get; set; }
+    }
+
+    public class IdeaListViewModel : ViewModelBase
+    {
+        public IPagedList<Idea> ideas { get; set; }
     }
 
 }

@@ -22,7 +22,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
                 var student = db.Student.Where(s => s.recordID == userID).FirstOrDefault();
                 var ticket = db.Ticket.FirstOrDefault();
-                var idea = db.Idea.Where(i => i.User.recordID != userID).ToList();
+                var idea = db.Idea.Where(i => i.User.recordID != userID).ToList().Take(5).ToList();
 
                 var studentUser = new StudentUserViewModel
                 {

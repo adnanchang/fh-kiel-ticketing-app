@@ -61,7 +61,7 @@
                 {
                     <div class="alert alert-dismissible alert-info">
                         <strong>Hey there!</strong> Looks like you there are no available ideas. Why don't you make one?
-                        <a href="#" class="btn btn-primary">Primary</a>
+                        <a href="/Proposal/Index" class="btn btn-primary">Create</a>
                     </div>
                 }
                 else
@@ -80,7 +80,15 @@
                             {
                                 <tr>
                                     <td>@item.title</td>
-                                    <td>@item.description</td>
+                                    @if (item.description.Count() > 100)
+                                    {
+                                        string shortString = item.description.Substring(0, 100) + "....";
+                                        <td>@shortString</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.description</td>
+                                    }
                                     <td>@item.type</td>
                                     <td>@item.User.firstName</td>
                                     <td><a href="/Idea/Details/@item.recordID">View</a></td>
@@ -88,6 +96,9 @@
                             }
                         </tbody>
                     </table>
+                    <div class="form-group">
+                            <a href="/Idea/Index" class="btn btn-primary">View All</a>
+                    </div>
                 }
             </div>
         </div>
