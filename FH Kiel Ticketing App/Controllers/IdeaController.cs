@@ -50,6 +50,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
         // GET: Idea/Details/5
         public ActionResult Details(int? id)
         {
+            var ticketExists = false;
             if (id == null)
             {
                 return RedirectToAction("Login", "User");
@@ -64,11 +65,17 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 int fieldID = Convert.ToInt32(idea.field);
                 var field = db.Fields.Where(f => f.recordID == fieldID).FirstOrDefault();
                 idea.field = field.field;
+
+                //Check if Idea already has a corresponding Ticket
+                var ticket = db.Ticket.Where(t => t.idea.recordID == idea.recordID).FirstOrDefault();
+
                 var ideaDetails = new IdeaDetailsViewModel
                 {
                     user = user,
                     Idea = idea
                 };
+
+                ViewBag.Ticket = ticket;
                 return View(ideaDetails);
             }
             else

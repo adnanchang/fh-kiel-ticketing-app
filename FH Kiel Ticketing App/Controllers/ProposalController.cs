@@ -62,32 +62,44 @@ namespace FH_Kiel_Ticketing_App.Controllers
         }
 
         // GET: Proposal/Create
-        public ActionResult Create()
+        public ActionResult Create(int? id)
         {
-             if (IsLoggedIn() && IsAuthorized())
+            if (IsLoggedIn() && IsAuthorized())
             {
-
                 int userID = GetUserID();
 
                 var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
-                var student = db.Student.Where(s => s.recordID == userID).FirstOrDefault();
-                var ticket = db.Ticket.Where(t => t.recordID > 0).FirstOrDefault();
                 var idea = db.Idea.Where(i => i.User.recordID != userID).ToList();
                 var fields = db.Fields.ToList();
                 var supervisors = db.Supervisor.ToList();
-                var viewModel = new ProposalIdeaFieldViewModel
-                {
-                    user = user,
-                    student = student,
-                    ticket = ticket,
-                    availableIdeas = idea,
-                    AllFields = fields,
-                    AllSupervisor = supervisors
-                };
 
-                if (student.matrikelNumber == 0)
+                ProposalIdeaFieldViewModel viewModel = null;
+                if (id != null)
                 {
-                    ViewBag.IsDataSet = false;
+                    var thisIdea = db.Idea.Where(i => i.recordID == id).FirstOrDefault();
+                    //To get field name
+                    int fieldID = Convert.ToInt32(thisIdea.field);
+                    var field = db.Fields.Where(f => f.recordID == fieldID).FirstOrDefault();
+                    thisIdea.field = field.field;
+                    viewModel = new ProposalIdeaFieldViewModel
+                    {
+                        user = user,
+                        availableIdeas = idea,
+                        idea = thisIdea,
+                        AllFields = fields,
+                        AllSupervisor = supervisors
+                    };
+                    ViewBag.IdeaExists = true;
+                }
+                else
+                {
+                    viewModel = new ProposalIdeaFieldViewModel
+                    {
+                        user = user,
+                        availableIdeas = idea,
+                        AllFields = fields,
+                        AllSupervisor = supervisors
+                    };
                 }
 
                 return View(viewModel);
@@ -106,30 +118,30 @@ namespace FH_Kiel_Ticketing_App.Controllers
             if (IsLoggedIn() && IsAuthorized())
             {
 
-             
-                    // TODO: Add insert logic here
 
-                    proposalIdeaFieldViewModel.AllFields = db.Fields.ToList();
-                    proposalIdeaFieldViewModel.AllSupervisor = db.Supervisor.ToList();
+                // TODO: Add insert logic here
 
-                    int userID = GetUserID();
-                    var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
-                    var idea = new Idea
-                    {
-                        title = proposalIdeaFieldViewModel.proposal.nameOfProject,
-                        description = proposalIdeaFieldViewModel.proposal.abstrac,
-                        type = proposalIdeaFieldViewModel.idea.type,
-                        field = proposalIdeaFieldViewModel.idea.field,
-                        User = user
-                    };
-                    db.Idea.Add(idea);
-                    db.SaveChanges();
+                proposalIdeaFieldViewModel.AllFields = db.Fields.ToList();
+                proposalIdeaFieldViewModel.AllSupervisor = db.Supervisor.ToList();
 
-                    int ideaRecordId = idea.recordID;
-                    var ideaCreated = db.Idea.Where(i => i.recordID == ideaRecordId).FirstOrDefault();
-                    proposalIdeaFieldViewModel.proposal.User = user;
-                    proposalIdeaFieldViewModel.proposal.Idea = ideaCreated;
-                    db.Proposal.Add(proposalIdeaFieldViewModel.proposal);
+                int userID = GetUserID();
+                var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
+                var idea = new Idea
+                {
+                    title = proposalIdeaFieldViewModel.proposal.nameOfProject,
+                    description = proposalIdeaFieldViewModel.proposal.abstrac,
+                    type = proposalIdeaFieldViewModel.idea.type,
+                    field = proposalIdeaFieldViewModel.idea.field,
+                    User = user
+                };
+                db.Idea.Add(idea);
+                db.SaveChanges();
+
+                int ideaRecordId = idea.recordID;
+                var ideaCreated = db.Idea.Where(i => i.recordID == ideaRecordId).FirstOrDefault();
+                proposalIdeaFieldViewModel.proposal.User = user;
+                proposalIdeaFieldViewModel.proposal.Idea = ideaCreated;
+                db.Proposal.Add(proposalIdeaFieldViewModel.proposal);
 
                 db.SaveChanges();
 
@@ -140,7 +152,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 var ticket = new Ticket
                 {
 
-                    
+
                     title = proposalIdeaFieldViewModel.proposal.nameOfProject,
                     status = "Proposal awaiting approval",
                     timesRejected = 0,
@@ -149,56 +161,56 @@ namespace FH_Kiel_Ticketing_App.Controllers
                     creationDate = date,
                     tickettype = "Thesis",
                     ticketStatus = ticketStatus
-                 
-                    };
-                
 
-               
-
-                    db.Ticket.Add(ticket);
-                    db.SaveChanges();
-                    int ticketRecordId = ticket.recordID;
-                    var ticketCreated = db.Ticket.Where(t => t.recordID == ticketRecordId).FirstOrDefault();
-
-                    string userRole = GetUserRole();
-                    var contributor = new Contributors
-                    {
-                        status = "Pending",
-                        Role = userRole,
-                        User = user,
-                        Ticket = ticketCreated
-
-                    };
-                    db.Contributors.Add(contributor);
-                    db.SaveChanges();
-                    var surperUser = db.User.Where(u => u.recordID == proposalIdeaFieldViewModel.supervisor).FirstOrDefault();
+                };
 
 
 
-                    var identifier = surperUser.email;
-                    var surperUserRole = db.RoleIdentifier
-                           .Join(db.RoleIdentifierDetails,
-                               roleIdentifier => roleIdentifier.recordID,
-                               roleIdentifierDetails => roleIdentifierDetails.RoleIdentifier.recordID,
-                               (roleIdentifier, roleIdentifierDetails) => new { RoleIdentifier = roleIdentifier, RoleIdentifierDetails = roleIdentifierDetails })
-                           .Where(roleAndDetails => identifier.Contains(roleAndDetails.RoleIdentifierDetails.identifier)).FirstOrDefault();
 
-                    contributor.User = surperUser;
-                    contributor.Role = surperUserRole.RoleIdentifier.role;
-                    db.Contributors.Add(contributor);
-                    db.SaveChanges();
+                db.Ticket.Add(ticket);
+                db.SaveChanges();
+                int ticketRecordId = ticket.recordID;
+                var ticketCreated = db.Ticket.Where(t => t.recordID == ticketRecordId).FirstOrDefault();
 
-                    return RedirectToAction("Index");
-          
-                    
-                   
-            
-        }
+                string userRole = GetUserRole();
+                var contributor = new Contributors
+                {
+                    status = "Pending",
+                    Role = userRole,
+                    User = user,
+                    Ticket = ticketCreated
+
+                };
+                db.Contributors.Add(contributor);
+                db.SaveChanges();
+                var surperUser = db.User.Where(u => u.recordID == proposalIdeaFieldViewModel.supervisor).FirstOrDefault();
+
+
+
+                var identifier = surperUser.email;
+                var surperUserRole = db.RoleIdentifier
+                       .Join(db.RoleIdentifierDetails,
+                           roleIdentifier => roleIdentifier.recordID,
+                           roleIdentifierDetails => roleIdentifierDetails.RoleIdentifier.recordID,
+                           (roleIdentifier, roleIdentifierDetails) => new { RoleIdentifier = roleIdentifier, RoleIdentifierDetails = roleIdentifierDetails })
+                       .Where(roleAndDetails => identifier.Contains(roleAndDetails.RoleIdentifierDetails.identifier)).FirstOrDefault();
+
+                contributor.User = surperUser;
+                contributor.Role = surperUserRole.RoleIdentifier.role;
+                db.Contributors.Add(contributor);
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+
+
+
+
+            }
             else
             {
                 return RedirectToAction("Login", "User");
-    }
-}
+            }
+        }
 
         // GET: Proposal/Edit/5
         public ActionResult Edit(int id)

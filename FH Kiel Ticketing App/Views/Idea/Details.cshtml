@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
 <h2>Details</h2>
 
 <div>
@@ -41,6 +42,25 @@
         <dd>
             @Html.DisplayFor(model => model.Idea.field)
         </dd>
-
     </dl>
+    @{
+        var userRole = Request.Cookies["UserCookie"]["UserRole"];
+
+        if (userRole == "Student")
+        {
+            var ticket = ViewBag.Ticket;
+            if (ticket == null)
+            {
+                <div class="alert alert-dismissible alert-info">
+                    <strong>Amazing!</strong> Looks like this idea is available for you to use.
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-1 col-md-10">
+                        <a href="/Proposal/Create/@Model.Idea.recordID" class="btn btn-primary">Create Ticket</a>
+                    </div>
+                </div>
+            }
+        }
+    }
 </div>
+<br/>
