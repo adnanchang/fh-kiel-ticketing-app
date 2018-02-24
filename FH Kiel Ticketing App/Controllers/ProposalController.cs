@@ -155,11 +155,10 @@ namespace FH_Kiel_Ticketing_App.Controllers
 
                 var now = DateTime.Now;
                 DateTime date = DateTime.Now;
-                var ticketStatus = db.TicketStatus.FirstOrDefault();
+                var ticketStatus = db.TicketStatus.Where(ts => ts.ticketStatus == "Proposal Awaiting Approval").FirstOrDefault();
                 var ticket = new Ticket
                 {
                     title = proposalIdeaFieldViewModel.proposal.nameOfProject,
-                    status = "Proposal awaiting approval",
                     timesRejected = 0,
                     User = user,
                     idea = ideaCreated,
@@ -180,7 +179,6 @@ namespace FH_Kiel_Ticketing_App.Controllers
                     Role = userRole,
                     User = user,
                     Ticket = ticketCreated
-
                 };
                 db.Contributors.Add(contributor);
                 db.SaveChanges();

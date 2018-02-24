@@ -14,7 +14,6 @@ namespace FH_Kiel_Ticketing_App.Models
 
         public virtual Ticket Ticket { get; set; }
 
-        [Required]
         public virtual User User { get; set; }
 
         [Required]

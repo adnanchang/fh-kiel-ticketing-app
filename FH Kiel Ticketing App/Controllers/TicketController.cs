@@ -128,19 +128,22 @@ namespace FH_Kiel_Ticketing_App.Controllers
                                     now.Hour, now.Minute, now.Second);
 
 
-            ticket.status = "Proposal Approved";
-            if (status == "rejected")
-            {
-                ticket.status = "Proposal Rjected";
-            }
-            else if (status == "inprogress")
-            {
-                ticket.status = "Proposal In Progress";
-            }
-            else if (status == "complete")
-            {
-                ticket.status = "Completed Successfully";
-            }
+            /**
+             * FIX THIS 
+             **/
+            //ticket.status = "Proposal Approved";
+            //if (status == "rejected")
+            //{
+            //    ticket.status = "Proposal Rjected";
+            //}
+            //else if (status == "inprogress")
+            //{
+            //    ticket.status = "Proposal In Progress";
+            //}
+            //else if (status == "complete")
+            //{
+            //    ticket.status = "Completed Successfully";
+            //}
 
             db.SaveChanges();
 
@@ -151,7 +154,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 Ticket = ticket,
                 User = sysUser,
                 CommentDate = date,
-                Content = "Ticket Status Changed to <b> " + ticket.status + "</b> by " + user.firstName + " " + user.lastName,
+                Content = "Ticket Status Changed to <b> " + ticket.ticketStatus.ticketStatus + "</b> by " + user.firstName + " " + user.lastName,
             };
             db.Comments.Add(commnets);
             db.SaveChanges();
@@ -299,6 +302,64 @@ namespace FH_Kiel_Ticketing_App.Controllers
             catch
             {
                 return View();
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Join(int? id)
+        {
+            var status = false;
+            if (id == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            else
+            {
+                string userRole = GetUserRole();
+                var date = DateTime.Now;
+                int userID = GetUserID();
+                var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
+                var ticket = db.Ticket.Where(t => t.recordID == id).FirstOrDefault();
+
+                //Preparing viewmodel
+                var viewModel = new ViewModelBase
+                {
+                    user = user
+                };
+
+                //Check if he already exists as a contributor
+                var cont = db.Contributors.Where(c => c.User.recordID == user.recordID).FirstOrDefault();
+                if (cont != null)
+                {
+                    ViewBag.Status = false;
+                    ViewBag.Message = "It seems that you've already sent a request for this ticket. Please be patient.";
+                    return View(viewModel);
+                }
+
+                //Add a new contributor
+                var contributor = new Contributors
+                {
+                    status = "Pending",
+                    Role = userRole,
+                    User = user,
+                    Ticket = ticket
+                };
+                db.Contributors.Add(contributor);
+
+                //Add a comment in the ticket about the contributor being added
+                var commnets = new Comments
+                {
+                    Ticket = ticket,
+                    CommentDate = date,
+                    Content = user.firstName + " " + user.lastName + " wants to join the ticket. Go to the members of the ticket to take further action."
+                };
+                db.Comments.Add(commnets);
+                db.SaveChanges();
+                status = true;
+                ViewBag.Status = status;
+                ViewBag.Message = "Your request has been sent. You will be notified once any action is taken.";
+
+                return View(viewModel);
             }
         }
 

@@ -60,6 +60,24 @@
                     </div>
                 </div>
             }
+            else if (ticket != null)
+            {
+                if (ticket.ticketStatus.ticketStatus == "Proposal Awaiting Approval" ||
+                    ticket.ticketStatus.ticketStatus == "Open" ||
+                    ticket.ticketStatus.ticketStatus == "Proposal Rejected" ||
+                    ticket.ticketStatus.ticketStatus == "Proposal Approved")
+                {
+                    <div class="alert alert-dismissible alert-warning">
+                        <strong>Woah!</strong> Looks like someone already has picked up this idea. <br />
+                        However you can still join the ticket if you want to. Just send in a request.
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-1 col-md-10">
+                            <a href="/Ticket/Join/@ticket.recordID" class="btn btn-primary">Send Request</a>
+                        </div>
+                    </div>
+                }
+            }
         }
     }
 </div>

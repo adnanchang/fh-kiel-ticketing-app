@@ -18,9 +18,6 @@ namespace FH_Kiel_Ticketing_App.Models
         [DisplayName("Title")]
         public string title { get; set; }
 
-        [DisplayName("Status")]
-        public string status { get; set; }
-
         [DisplayName("Times Ticket Rejected")]
         public int timesRejected { get; set; }
         public string tickettype { get; set; } //Thesis, project,

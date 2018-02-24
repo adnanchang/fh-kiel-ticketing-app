@@ -1,0 +1,30 @@
+﻿@model FH_Kiel_Ticketing_App.Models.ViewModelBase
+@{
+    ViewBag.Title = "Join";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Request Sent</h2>
+
+@if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+{
+    <div class="alert alert-dismissible alert-success">
+        <strong>That went well!</strong> @ViewBag.Message
+        <p><a class="alert-link" href="/User/Login">Click Here</a> to go back to your Home page.</p>
+    </div>
+}
+else if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status) == false)
+{
+    <div class="alert alert-dismissible alert-danger">
+        <strong>Oh Snap!</strong> @ViewBag.Message
+        <p><a class="alert-link" href="/User/Login">Click Here</a> to go back to your Home page.</p>
+    </div>
+}
+else
+{
+    <div class="alert alert-dismissible alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Oh snap!</strong> Something went horribly wrong. Perhaps you're not even supposed to be on this page.
+        <p><a class="alert-link" href="/User/Login">Click Here</a> to go back to your Home page.</p>
+    </div>
+}
