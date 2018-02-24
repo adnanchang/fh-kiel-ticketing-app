@@ -113,29 +113,37 @@ namespace FH_Kiel_Ticketing_App.Controllers
 
         // POST: Proposal/Create
         [HttpPost]
-        public ActionResult Create(ProposalIdeaFieldViewModel proposalIdeaFieldViewModel)
+        public ActionResult Create(ProposalIdeaFieldViewModel proposalIdeaFieldViewModel, int? id)
         {
             if (IsLoggedIn() && IsAuthorized())
             {
-
-
-                // TODO: Add insert logic here
 
                 proposalIdeaFieldViewModel.AllFields = db.Fields.ToList();
                 proposalIdeaFieldViewModel.AllSupervisor = db.Supervisor.ToList();
 
                 int userID = GetUserID();
                 var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
-                var idea = new Idea
+                Idea idea = null;
+
+                // No need to create a new idea if it already exists i.e. if a Professor has made an idea
+                if (id != null)
                 {
-                    title = proposalIdeaFieldViewModel.proposal.nameOfProject,
-                    description = proposalIdeaFieldViewModel.proposal.abstrac,
-                    type = proposalIdeaFieldViewModel.idea.type,
-                    field = proposalIdeaFieldViewModel.idea.field,
-                    User = user
-                };
-                db.Idea.Add(idea);
-                db.SaveChanges();
+                    idea = db.Idea.Where(i => i.recordID == id).FirstOrDefault();
+                    proposalIdeaFieldViewModel.proposal.nameOfProject = idea.title;
+                }
+                else
+                {
+                    idea = new Idea
+                    {
+                        title = proposalIdeaFieldViewModel.proposal.nameOfProject,
+                        description = proposalIdeaFieldViewModel.proposal.abstrac,
+                        type = proposalIdeaFieldViewModel.idea.type,
+                        field = proposalIdeaFieldViewModel.idea.field,
+                        User = user
+                    };
+                    db.Idea.Add(idea);
+                    db.SaveChanges();
+                }
 
                 int ideaRecordId = idea.recordID;
                 var ideaCreated = db.Idea.Where(i => i.recordID == ideaRecordId).FirstOrDefault();
@@ -146,26 +154,19 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 db.SaveChanges();
 
                 var now = DateTime.Now;
-                var date = new DateTime(now.Year, now.Month, now.Day,
-                                        now.Hour, now.Minute, now.Second);
+                DateTime date = DateTime.Now;
                 var ticketStatus = db.TicketStatus.FirstOrDefault();
                 var ticket = new Ticket
                 {
-
-
                     title = proposalIdeaFieldViewModel.proposal.nameOfProject,
                     status = "Proposal awaiting approval",
                     timesRejected = 0,
                     User = user,
                     idea = ideaCreated,
                     creationDate = date,
-                    tickettype = "Thesis",
+                    tickettype = ideaCreated.type,
                     ticketStatus = ticketStatus
-
                 };
-
-
-
 
                 db.Ticket.Add(ticket);
                 db.SaveChanges();
@@ -185,8 +186,6 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 db.SaveChanges();
                 var surperUser = db.User.Where(u => u.recordID == proposalIdeaFieldViewModel.supervisor).FirstOrDefault();
 
-
-
                 var identifier = surperUser.email;
                 var surperUserRole = db.RoleIdentifier
                        .Join(db.RoleIdentifierDetails,
@@ -201,10 +200,6 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 db.SaveChanges();
 
                 return RedirectToAction("Index");
-
-
-
-
             }
             else
             {

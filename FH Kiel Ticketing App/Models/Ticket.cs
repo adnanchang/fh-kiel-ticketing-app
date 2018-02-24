@@ -12,7 +12,6 @@ namespace FH_Kiel_Ticketing_App.Models
     {
         [Key]
         [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int recordID { get; set; }
 
         [Required(ErrorMessage = "The ticket needs a title")]
@@ -27,7 +26,9 @@ namespace FH_Kiel_Ticketing_App.Models
         public string tickettype { get; set; } //Thesis, project,
 
         public DateTime creationDate { get; set; }
-       
+
+        public virtual ICollection<Comments> Comments { get; set; }
+
         public virtual Idea idea { get; set; }
         public virtual User User { get; set; }
         public virtual TicketStatus ticketStatus { get; set; }

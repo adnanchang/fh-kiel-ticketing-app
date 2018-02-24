@@ -11,8 +11,9 @@ namespace FH_Kiel_Ticketing_App.Models
         [Key]
         [Required]
         public int RecID { get; set; }
-        [Required]
+
         public virtual Ticket Ticket { get; set; }
+
         [Required]
         public virtual User User { get; set; }
 

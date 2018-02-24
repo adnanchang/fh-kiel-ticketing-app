@@ -53,7 +53,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
         }
         //Get: Student/Ticket/
 
-            public ActionResult Ticket()
+        public ActionResult Ticket()
         {
             return View();
         }

@@ -21,7 +21,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 int userID = GetUserID();
                 ViewBag.UserID = GetUserID();
                 var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
-                
+
                 var student = db.Student.Where(s => s.recordID == userID).FirstOrDefault();
                 var ticket = db.Ticket.Where(t => t.recordID > 0).FirstOrDefault();
                 var idea = db.Idea.Where(i => i.User.recordID != userID).ToList();
@@ -50,7 +50,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
 
         public ActionResult Ticket(int id)
         {
-           
+
             if (IsLoggedIn())
             {
 
@@ -59,21 +59,21 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 ViewBag.UserRole = GetUserRole();
 
                 var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
-                
+
                 var student = db.Student.Where(s => s.recordID == userID).FirstOrDefault();
                 var ticket = db.Ticket.Where(t => t.recordID == id).FirstOrDefault();
                 var comments = db.Comments.Where(c => c.Ticket.recordID == id).ToList();
                 var contributersNames = (from u in db.User
-                                         join c in db.Contributors on u.recordID equals  c.User.recordID
-                                        where c.Ticket.recordID == ticket.recordID
+                                         join c in db.Contributors on u.recordID equals c.User.recordID
+                                         where c.Ticket.recordID == ticket.recordID
 
-                                         
-                                         
-                                         
+
+
+
                                          select new StudentTicketViewModel.ContributingUsers // had to create new temp table with two columns
                                          {
-                                            lastName = u.lastName,
-                                            Role =   c.Role
+                                             lastName = u.lastName,
+                                             Role = c.Role
                                          }).ToList();
                 var idea = db.Idea.Where(i => i.User.recordID != userID).ToList();
                 var proposal = (from p in db.Proposal
@@ -97,14 +97,15 @@ namespace FH_Kiel_Ticketing_App.Controllers
                     proposal = proposal,
                     files = ListOffiles
                 };
-               
-                if(GetUserRole() != "Supervisor") {
+
+                if (GetUserRole() != "Supervisor")
+                {
                     if (student.matrikelNumber == 0)
                     {
                         ViewBag.IsDataSet = false;
                     }
                 }
-                
+
 
                 return View(studentUser);
 
@@ -150,7 +151,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 Ticket = ticket,
                 User = sysUser,
                 CommentDate = date,
-                Content = "Ticket Status Changed to <b> " + ticket.status + "</b> by " + user.firstName + " " +user.lastName,
+                Content = "Ticket Status Changed to <b> " + ticket.status + "</b> by " + user.firstName + " " + user.lastName,
             };
             db.Comments.Add(commnets);
             db.SaveChanges();
@@ -202,7 +203,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                     User = sysUser,
                     Ticket = ticket,
                     CommentDate = date,
-                    Content = fileName + " upload by <b>" + user.firstName + " " +user.lastName + "</b>"
+                    Content = fileName + " upload by <b>" + user.firstName + " " + user.lastName + "</b>"
                 };
                 db.Comments.Add(comment);
                 db.SaveChanges();
@@ -313,7 +314,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
             return View();
         }
 
-        
+
         [NonAction]
         public bool IsLoggedIn()
         {

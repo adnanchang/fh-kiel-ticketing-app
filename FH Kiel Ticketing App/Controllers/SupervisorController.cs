@@ -263,8 +263,8 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 ViewBag.Message = "Something doesn't look right. Are you sure you filled the form correctly?";
                 return View();
             }
-            
-            
+
+
         }
 
         [NonAction]

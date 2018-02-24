@@ -52,6 +52,7 @@ new SelectListItem() { Text = "Master Project", Value = "Master Project"}
 
                 @if (ViewBag.IdeaExists != null && ViewBag.IdeaExists == true)
                 {
+                    <input type="hidden" value="@ViewBag.IdeaExists" name="IdeaExists" />
                     <div class="form-group">
                         @Html.LabelFor(model => model.proposal.nameOfProject, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
