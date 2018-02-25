@@ -98,47 +98,47 @@
         <h5 class="contributor">Ticket Status</h5>
         <div class="row">
             <div class="col-lg-12">
-                @if (Model.ticket.status == "Proposal awaiting approval")
+                @if (Model.ticket.ticketStatus.ticketStatus == "Proposal awaiting approval")
                 {
-                    <p class="font14 text-warning">@Model.ticket.status</p>
+                    <p class="font14 text-warning">@Model.ticket.ticketStatus.ticketStatus</p>
                 }
-                @if (Model.ticket.status == "Proposal Approved")
+                @if (Model.ticket.ticketStatus.ticketStatus == "Proposal Approved")
                 {
-                    <p class="font14 text-success">@Model.ticket.status</p>
+                    <p class="font14 text-success">@Model.ticket.ticketStatus.ticketStatus</p>
                 }
-                @if (Model.ticket.status == "Proposal Rjected")
+                @if (Model.ticket.ticketStatus.ticketStatus == "Proposal Rjected")
                 {
-                    <p class="font14 text-danger">@Model.ticket.status</p>
+                    <p class="font14 text-danger">@Model.ticket.ticketStatus.ticketStatus</p>
                 }
-                @if (Model.ticket.status == "Proposal In Progress")
+                @if (Model.ticket.ticketStatus.ticketStatus == "Proposal In Progress")
                 {
-                    <p class="font14 text-success">@Model.ticket.status</p>
+                    <p class="font14 text-success">@Model.ticket.ticketStatus.ticketStatus</p>
                 }
-                @if (Model.ticket.status == "Completed Successfully")
+                @if (Model.ticket.ticketStatus.ticketStatus == "Completed Successfully")
                 {
-                    <p class="font14 text-success">@Model.ticket.status</p>
+                    <p class="font14 text-success">@Model.ticket.ticketStatus.ticketStatus</p>
                     
                 }
                @if(ViewBag.UserRole =="Supervisor"){
-                    if (Model.ticket.status == "Proposal awaiting approval")
+                    if (Model.ticket.ticketStatus.ticketStatus == "Proposal awaiting approval")
                     {
-                        <p class="font14"><a href="/Ticket/ChangeStatus?status=@Model.ticket.status&id=@Model.ticket.recordID" type="submit"> Approve proposal</a></p>
+                        <p class="font14"><a href="/Ticket/ChangeStatus?status=@Model.ticket.ticketStatus.ticketStatus&id=@Model.ticket.recordID" type="submit"> Approve proposal</a></p>
                         <p class="font14"><a href="/Ticket/ChangeStatus?status=rejected&id=@Model.ticket.recordID" type="submit"> Reject Proposal</a></p>
                     }
-                    if (Model.ticket.status == "Proposal Approved")
+                    if (Model.ticket.ticketStatus.ticketStatus == "Proposal Approved")
                     {
                         <p class="font14"><a href="/Ticket/ChangeStatus?status=inprogress&id=@Model.ticket.recordID" type="submit"> Change to In Progress</a></p>
                         <p class="font14"><a href="/Ticket/ChangeStatus?status=complete&id=@Model.ticket.recordID" type="submit"> Complete Successfully</a></p>
                     }
-                    if (Model.ticket.status == "Proposal Rjected")
+                    if (Model.ticket.ticketStatus.ticketStatus == "Proposal Rjected")
                     {
                         <p>Ticket CLosed</p>
                     }
-                    if (Model.ticket.status == "Proposal In Progress")
+                    if (Model.ticket.ticketStatus.ticketStatus == "Proposal In Progress")
                     {
                         <p class="font14"><a href="/Ticket/ChangeStatus?status=complete&id=@Model.ticket.recordID" type="submit"> Complete Successfully</a></p>
                     }
-                     if (Model.ticket.status == "Completed Successfully")
+                     if (Model.ticket.ticketStatus.ticketStatus == "Completed Successfully")
                      {
                          <p>Ticket CLosed</p>
                      }
