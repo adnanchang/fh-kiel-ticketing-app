@@ -1,8 +1,12 @@
 ﻿using FH_Kiel_Ticketing_App.Context;
 using FH_Kiel_Ticketing_App.Models;
+using Quartz;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -118,16 +122,53 @@ namespace FH_Kiel_Ticketing_App.Controllers
                     var fields = new List<Fields>();
 
                     user.emailNotification = supervisorUser.user.emailNotification;
-                    foreach (int item in supervisorUser.selectedFields)
+                    if (supervisorUser.selectedFields != null)
                     {
-                        fields.Add(db.Fields.Where(f => f.recordID == item).FirstOrDefault());
+                        foreach (int item in supervisorUser.selectedFields)
+                        {
+                            fields.Add(db.Fields.Where(f => f.recordID == item).FirstOrDefault());
+                        }
+                        supervisor.Fields.Clear();
+                        foreach (var item in fields)
+                        {
+                            supervisor.Fields.Add(item);
+                        }
                     }
-                    supervisor.Fields.Clear();
-                    foreach (var item in fields)
+
+                    if (supervisorUser.supervisor.daysForReport != null)
                     {
-                        supervisor.Fields.Add(item);
+                        supervisor.daysForReport = supervisorUser.supervisor.daysForReport;
                     }
+                    
                     db.SaveChanges();
+
+                    //Checking for Quartz Scheduler
+                    var scheduler = HttpContext.Application["Scheduler"] as IScheduler;
+
+                    //Checking if the job is already added in the scheduler
+                    JobKey jobKey = JobKey.Create("report-job", "report-job-group");
+                    var reportJob = scheduler.GetJobDetail(jobKey);
+
+                    if (reportJob == null)
+                    {
+                        //Preparing data
+                        string subject = "Your Ticketing Report";
+                        var sysUser = db.User.Where(u => u.recordID == 999999).FirstOrDefault();
+
+                        IJobDetail job = JobBuilder.Create<ReportJob>()
+                            .WithIdentity("report-job", "report-job-group")
+                            .Build();
+                        job.JobDataMap["subject"] = subject;
+                        job.JobDataMap["user"] = user;
+                        job.JobDataMap["sysUser"] = sysUser;
+
+                        ITrigger trigger = TriggerBuilder.Create()
+                            .WithSimpleSchedule(s => s.WithIntervalInSeconds(60).RepeatForever())
+                            .Build();
+
+                        scheduler.ScheduleJob(job, trigger);
+                    }
+                    
                 }
                 return RedirectToAction("Index");
             }
@@ -320,6 +361,42 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 userRole = Request.Cookies["UserCookie"]["UserRole"].ToString();
             }
             return userRole;
+        }
+    }
+
+    public class ReportJob : IJob
+    {
+        public string subject { get; set; }
+        public string body { get; set; }
+
+        public User user { get; set; }
+
+        public User sysUser { get; set; }
+
+        public void Execute(IJobExecutionContext context)
+        {
+            JobDataMap dataMap = context.JobDetail.JobDataMap;
+            subject = dataMap.GetString("subject");
+            user = (User)dataMap["user"];
+            sysUser = (User)dataMap["sysUser"];
+
+            //The body has to be refreshed everytime we send an email
+            body = "This is a test email sent at " + DateTime.Now; 
+            using (var message = new MailMessage(sysUser.email, user.email))
+            {
+                message.Subject = subject;
+                message.Body = body;
+                using (SmtpClient client = new SmtpClient
+                {
+                    EnableSsl = true,
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    Credentials = new NetworkCredential(sysUser.email, sysUser.password)
+                })
+                {
+                    client.Send(message);
+                }
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -15,6 +16,10 @@ namespace FH_Kiel_Ticketing_App.Models
         public virtual User User { get; set; }
 
         public string userType { get; set; }
+
+        [DisplayName("Email Frequency (Days)")]
+        [DataType(DataType.Text)]
+        public string daysForReport { get; set; }
 
         [NotMapped]
         public int[] selectedFields { get; set; }

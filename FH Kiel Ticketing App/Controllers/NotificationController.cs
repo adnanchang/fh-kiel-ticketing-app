@@ -60,7 +60,12 @@ namespace FH_Kiel_Ticketing_App.Controllers
 
                     if (user.emailNotification == true)
                     {
-                        SendNotificationEmail(message, targetURL, user);
+                        using (TicketingApp db = new TicketingApp())
+                        {
+                            //Getting system user data
+                            var sysUser = db.User.Where(u => u.recordID == 999999).FirstOrDefault();
+                            SendNotificationEmail(message, targetURL, user, sysUser);
+                        }
                     }
                 }
 
@@ -123,16 +128,17 @@ namespace FH_Kiel_Ticketing_App.Controllers
         /// <param name="message">The message of the notification</param>
         /// <param name="targetURL">The target URL</param>
         /// <param name="user">The user it has to be sent to</param>
+        /// <param name="systemUser">The system user that sends the email</param>
         [NonAction]
-        public void SendNotificationEmail(string message, string targetURL, User user)
+        public void SendNotificationEmail(string message, string targetURL, User user, User systemUser)
         {
             //var verifyUrl = targetUrl + "?ac=" + activationCode + "&id=" + recordID;
             var finalLink = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, targetURL);
 
             var subject = "Ticketing App Alert";
-            var fromEmail = new MailAddress("noreply.fhticketingapp@gmail.com", "The Ticketing Robot");
+            var fromEmail = new MailAddress(systemUser.email, "The Ticketing Robot");
             var toEmail = new MailAddress(user.email);
-            var fromPassword = "thisisalongpassword";
+            var fromPassword = systemUser.password;
             message += " <br/><br/><a href='" + finalLink + "'>" + finalLink + "</a>";
 
             var smtp = new SmtpClient

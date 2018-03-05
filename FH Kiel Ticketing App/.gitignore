@@ -1,3 +1,4 @@
 /FH Kiel Ticketing App.csproj
 *.config
 *.csproj
+*.xsd

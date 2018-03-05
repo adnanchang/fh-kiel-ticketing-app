@@ -252,7 +252,9 @@ namespace FH_Kiel_Ticketing_App.Controllers
                         string body = "<br/><br/>So you want to join the ticketing world? One more step and you're done." +
                             " Please Click on the link below to verify your account.";
                         string targetUrl = "/User/VerifyAccount/";
-                        SendVerificationEmail(user.recordID, user.email, user.activationCode.ToString(), targetUrl, subject, body);
+                        //Getting system user data
+                        var sysUser = db.User.Where(u => u.recordID == 999999).FirstOrDefault();
+                        SendVerificationEmail(user.recordID, user.email, user.activationCode.ToString(), targetUrl, subject, body, sysUser);
                         status = true;
                         message = "Your account is now created. Please check your email for an activation code.";
                     }
@@ -288,14 +290,14 @@ namespace FH_Kiel_Ticketing_App.Controllers
         }
 
         [NonAction]
-        public void SendVerificationEmail(int recordID, string email, string activationCode, string targetUrl, string subject, string body)
+        public void SendVerificationEmail(int recordID, string email, string activationCode, string targetUrl, string subject, string body, User systemUser)
         {
             var verifyUrl = targetUrl + "?ac=" + activationCode + "&id=" + recordID;
             var finalLink = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, verifyUrl);
 
-            var fromEmail = new MailAddress("noreply.fhticketingapp@gmail.com", "The Ticketing Robot");
+            var fromEmail = new MailAddress(systemUser.email, "The Ticketing Robot");
             var toEmail = new MailAddress(email);
-            var fromPassword = "thisisalongpassword";
+            var fromPassword = systemUser.password;
             body += " <br/><br/><a href='" + finalLink + "'>" + finalLink + "</a>";
 
             var smtp = new SmtpClient
@@ -385,8 +387,9 @@ namespace FH_Kiel_Ticketing_App.Controllers
                     string body = "<br/><br/>If this wasn't done by you then please ignore this email. " +
                         "Otherwise Please Click on the link below to reset your password.";
                     string targetUrl = "/User/ResetPassword/";
-
-                    SendVerificationEmail(user.recordID, user.email, user.activationCode.ToString(), targetUrl, subject, body);
+                    //Getting system user data
+                    var sysUser = db.User.Where(u => u.recordID == 999999).FirstOrDefault();
+                    SendVerificationEmail(user.recordID, user.email, user.activationCode.ToString(), targetUrl, subject, body, sysUser);
                     status = true;
                     message = "Please check your email for a reset password link.";
                 }
