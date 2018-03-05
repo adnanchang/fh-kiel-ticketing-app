@@ -2,3 +2,4 @@
 *.config
 *.csproj
 *.xsd
+*.csproj.user

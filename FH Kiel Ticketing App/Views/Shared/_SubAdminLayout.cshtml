@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="@Url.Content("~/unnamed.png")" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style type="text/css">
+        /*
+             I am going to overwrite css rather than
+             messing up with the original bootstrap file
+         */
+        /*.navbar-inverse {
+             background-color: #3C5984; /*Fachhochschules Color*/
+        /*border-color: #314A68;
+        }*/
+
+        /*.navbar-inverse .navbar-brand {
+                 color: white;
+             }*/
+
+        /*.navbar-inverse .navbar-text {
+                 color: white;
+             }*/
+
+        .img {
+            width: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="~/User/Login">
+                    <img class="navbar-left" style="width: 4.5rem; padding-top: 10px; padding-bottom: 10px; padding-right: 10px;"
+                         src="@Url.Content("~/withoutBackground.png")" />
+                </a>
+                @Html.ActionLink("Ticketing App", "AdminIndex", "User", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav"></ul>
+                @if (Request.Cookies["UserCookie"] != null)
+                {
+                    var userRole = Request.Cookies["UserCookie"]["UserRole"];
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/User/AdminIndex">Hey, @Model.user.firstName</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Settings<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="/User/AdminLogout">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+    <div class="container body-content">
+        <br />
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - A Master Project By H. K. P. A</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

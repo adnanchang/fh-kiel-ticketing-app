@@ -472,6 +472,111 @@ namespace FH_Kiel_Ticketing_App.Controllers
             ViewBag.Status = status;
             return View();
         }
+
+        [HttpGet]
+        public ActionResult AdminLogin()
+        {
+            KillUserCookie();
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AdminLogin(User user)
+        {
+            if (user.email == "noreply.fhticketingapp@gmail.com" && user.password == "thisisalongpassword")
+            {
+                // Making the Cookie
+                HttpCookie httpCookie = new HttpCookie("UserCookie");
+
+                httpCookie["UserID"] = user.recordID.ToString();
+                httpCookie["UserRole"] = "sysUser";
+                httpCookie.Expires = DateTime.Now.AddMinutes(30);
+                Response.Cookies.Add(httpCookie);
+                return RedirectToAction("AdminIndex");
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult AdminLogout()
+        {
+            KillUserCookie();
+            return RedirectToAction("Login");
+        }
+
+        [HttpGet]
+        public ActionResult AdminIndex()
+        {
+            if (IsLoggedIn())
+            {
+                using (TicketingApp db = new TicketingApp())
+                {
+                    var user = db.User.Where(u => u.recordID == 999999).FirstOrDefault();
+                    var viewModel = new ViewModelBase
+                    {
+                        user = user
+                    };
+                    return View(viewModel);
+                }
+                
+            }
+            return RedirectToAction("AdminLogin");
+        }
+
+        [NonAction]
+        public bool IsLoggedIn()
+        {
+            if (Request.Cookies["UserCookie"] != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        [NonAction]
+        public bool IsAuthorized()
+        {
+            if (Request.Cookies["UserCookie"] != null)
+            {
+                if (Request.Cookies["UserCookie"]["UserRole"].ToString() == "Student")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        [NonAction]
+        public int GetUserID()
+        {
+            int userID = -1;
+            if (Request.Cookies["UserCookie"] != null)
+            {
+                userID = Convert.ToInt32(Request.Cookies["UserCookie"]["UserID"].ToString());
+            }
+            return userID;
+        }
+
+        [NonAction]
+        public string GetUserRole()
+        {
+            string userRole = null;
+            if (Request.Cookies["UserCookie"] != null)
+            {
+                userRole = Request.Cookies["UserCookie"]["UserRole"].ToString();
+            }
+            return userRole;
+        }
     }
 
 
