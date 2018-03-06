@@ -21,6 +21,8 @@ namespace FH_Kiel_Ticketing_App.Models
         public DateTime CommentDate { get; set; }
 
         public virtual Comments RepliedTo { get; set; }
+
+        public string CommentsFor { get; set; }
         
 
     }
