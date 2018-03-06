@@ -1,0 +1,81 @@
+﻿@model FH_Kiel_Ticketing_App.Models.StudentTicketViewModel
+<li class="right clearfix">
+    <p class="sender">
+        <b>@Html.Raw("Proposal")</b>
+
+    </p>
+    <div class="sender col-lg-11 sender-text clearfix" style="margin-left:30px">
+        <b>Name of Project :    </b> @Html.Raw(@Model.proposal.nameOfProject)<br /><br />
+        <b>Abstract :   </b> @Html.Raw(@Model.proposal.abstrac)<br /><br />
+        <b>Introduction :   </b> @Html.Raw(@Model.proposal.introduction)<br /><br />
+        <b>Description :   </b> @Html.Raw(@Model.proposal.overallDescription)<br /><br />
+        <b>Functional Requirements :   </b> @Html.Raw(@Model.proposal.functionalRequirements)<br /><br />
+        <b>Non Functional Requirements :    </b> @Html.Raw(@Model.proposal.nonFunctionalRequirements)<br /><br />
+        <b> Project Technologies :   </b> @Html.Raw(@Model.proposal.projectTechnologies)<br /><br />
+        <b>Result :    </b> @Html.Raw(@Model.proposal.result)<br /><br />
+    </div>
+</li><hr />
+<div class="project-chat">
+    <ul class="chat">
+        @foreach (var item in Model.comments.Where( c => c.CommentsFor == "P"))
+        {
+
+
+
+
+            if (Model.user.recordID == item.User.recordID)
+            {
+                <li class="right clearfix">
+                    <span class="col-lg-1 pull-right">
+
+                        <img src="@(Url.Content("~") + item.User.recordID +".PNG")" height="50" width="50" alt="User Avatar" class="img-circle" />
+                    </span>
+                    <div class="col-lg-11 sender-text clearfix">
+                        <p class="sender">
+                            @Html.Raw(item.Content)
+
+                        </p>
+                        <small class="pull-right">@item.CommentDate.ToShortDateString()</small>
+                    </div>
+                </li>
+
+            }
+            else
+            {
+                <li class="left clearfix">
+                    <span class="pull-left col-lg-1">
+                        <img src="@(Url.Content("~") + item.User.recordID +".PNG")" height="50" width="50" alt="User Avatar" class="img-circle" />
+                    </span>
+                    <div class="col-lg-11 clearfix">
+                        <p class="receiver">
+                            @Html.Raw(item.Content)
+
+                        </p>
+                        <small>@item.CommentDate.ToLocalTime()</small>
+                    </div>
+                </li>
+            }
+        }
+
+
+
+
+    </ul>
+    <div class="col-lg-12" style="margin-top:30px">
+
+        @using (Html.BeginForm("PostComment", "Ticket", FormMethod.Post))
+    {
+        @Html.HiddenFor(model => model.user.recordID)
+        @Html.HiddenFor(model => model.ticket.recordID)
+        @Html.HiddenFor(model => model.theComment.CommentsFor, new { Value="P"})
+       
+    @Html.TextBoxFor(m => Model.theComment.Content, new { htmlAttributes = new { @class = "form-control col-lg-10 comment-box pull-left" }, style = " min-width: 100%; height: 70px;" })
+
+    <div class="form-group pull-right">
+        <div class="col-lg-2">
+            <input type="submit" value="submit" class="btn btn-primary" style="margin-top:10px;" />
+        </div>
+    </div>
+}
+    </div>
+</div>
