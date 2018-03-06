@@ -1,12 +1,12 @@
-﻿using System;
+﻿using FH_Kiel_Ticketing_App.Context;
+using FH_Kiel_Ticketing_App.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using FH_Kiel_Ticketing_App.Context;
-using FH_Kiel_Ticketing_App.Models;
 
 namespace FH_Kiel_Ticketing_App.Controllers
 {
@@ -88,6 +88,16 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 var path = Path.Combine(Server.MapPath("~/App_Data/uploads"));
                 DirectoryInfo dirInfo = new DirectoryInfo(path);
                 List<FileInfo> ListOffiles = dirInfo.GetFiles().ToList();
+                for (var i = 0; i < ListOffiles.Count; i++)
+                                   {
+                    string tokens = ListOffiles[i].ToString();
+                    string[] token = tokens.Split('_');
+                                        if (ticket.recordID.ToString() != token[0])
+                                            {
+                        ListOffiles.Remove(ListOffiles[i]);
+                        i = i - 1;
+                                            }
+                                    }
                 var studentUser = new StudentTicketViewModel
                 {
                     user = user,
@@ -179,7 +189,8 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 User = user,
                 Ticket = ticket,
                 CommentDate = date,
-                Content = model.theComment.Content
+                Content = model.theComment.Content,
+                CommentsFor = model.theComment.CommentsFor
             };
             db.Comments.Add(comment);
             db.SaveChanges();
@@ -196,7 +207,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 // extract only the filename
                 var fileName = Path.GetFileName(file.FileName);
                 // store the file inside ~/App_Data/uploads folder
-                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), model.ticket.recordID + "_" + model.user.recordID + "_" + fileName);
+                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), model.ticket.recordID + "_" + fileName);
                 file.SaveAs(path);
                 var now = DateTime.Now;
                 var date = new DateTime(now.Year, now.Month, now.Day,
