@@ -97,7 +97,14 @@ namespace FH_Kiel_Ticketing_App.Controllers
         {
             if (Request.Cookies["UserCookie"] != null)
             {
-                return RedirectToAction("Index", Request.Cookies["UserCookie"]["UserRole"].ToString());
+                if (Request.Cookies["UserCookie"]["UserRole"].ToString() != "sysUser")
+                {
+                    return RedirectToAction("Index", Request.Cookies["UserCookie"]["UserRole"].ToString());
+                }
+                else
+                {
+                    return RedirectToAction("AdminLogin");
+                }
             }
             return View();
         }
