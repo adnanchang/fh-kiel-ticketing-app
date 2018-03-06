@@ -126,8 +126,8 @@ namespace FH_Kiel_Ticketing_App.Controllers
 
                         var role = db.RoleIdentifier
                             .Join(db.RoleIdentifierDetails,
-                                roleIdentifier => roleIdentifier.recordID,
-                                roleIdentifierDetails => roleIdentifierDetails.RoleIdentifier.recordID,
+                                roleIdentifier => roleIdentifier.roleIdentifierID,
+                                roleIdentifierDetails => roleIdentifierDetails.RoleIdentifier.roleIdentifierID,
                                 (roleIdentifier, roleIdentifierDetails) => new { RoleIdentifier = roleIdentifier, RoleIdentifierDetails = roleIdentifierDetails })
                             .Where(roleAndDetails => roleAndDetails.RoleIdentifierDetails.identifier == identifier).FirstOrDefault();
 
@@ -220,8 +220,8 @@ namespace FH_Kiel_Ticketing_App.Controllers
 
                     var role = db.RoleIdentifier
                         .Join(db.RoleIdentifierDetails,
-                            roleIdentifier => roleIdentifier.recordID,
-                            roleIdentifierDetails => roleIdentifierDetails.RoleIdentifier.recordID,
+                            roleIdentifier => roleIdentifier.roleIdentifierID,
+                            roleIdentifierDetails => roleIdentifierDetails.RoleIdentifier.roleIdentifierID,
                             (roleIdentifier, roleIdentifierDetails) => new { RoleIdentifier = roleIdentifier, RoleIdentifierDetails = roleIdentifierDetails })
                         .Where(roleAndDetails => roleAndDetails.RoleIdentifierDetails.identifier == identifier).FirstOrDefault();
                     if (role != null)

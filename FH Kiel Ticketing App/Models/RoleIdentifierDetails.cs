@@ -17,6 +17,8 @@ namespace FH_Kiel_Ticketing_App.Models
         [DisplayName("Identifier")]
         public string identifier { get; set; }
 
+        public int roleIdentifierID { get; set; }
+
         public virtual RoleIdentifier RoleIdentifier { get; set; }
     }
 }

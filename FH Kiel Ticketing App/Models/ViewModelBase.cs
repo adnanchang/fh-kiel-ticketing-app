@@ -39,4 +39,11 @@ namespace FH_Kiel_Ticketing_App.Models
         public IPagedList<Idea> ideas { get; set; }
     }
 
+    public class RoleIdentifierDetailsViewModel : ViewModelBase
+    {
+        public RoleIdentifier roleIdentifier { get; set; }
+        public List<RoleIdentifier> roleIdentifiers { get; set; }
+        public RoleIdentifierDetails roleIdentifierDetails { get; set; }
+    }
+
 }

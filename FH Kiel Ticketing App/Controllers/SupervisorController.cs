@@ -142,32 +142,37 @@ namespace FH_Kiel_Ticketing_App.Controllers
                     
                     db.SaveChanges();
 
-                    //Checking for Quartz Scheduler
-                    var scheduler = HttpContext.Application["Scheduler"] as IScheduler;
-
-                    //Checking if the job is already added in the scheduler
-                    JobKey jobKey = JobKey.Create("report-job", "report-job-group");
-                    var reportJob = scheduler.GetJobDetail(jobKey);
-
-                    if (reportJob == null)
+                    //Checking if scheduler is needed
+                    if (supervisor.daysForReport != "0")
                     {
-                        //Preparing data
-                        string subject = "Your Ticketing Report";
-                        var sysUser = db.User.Where(u => u.recordID == 999999).FirstOrDefault();
+                        //Checking for Quartz Scheduler
+                        var scheduler = HttpContext.Application["Scheduler"] as IScheduler;
 
-                        IJobDetail job = JobBuilder.Create<ReportJob>()
-                            .WithIdentity("report-job", "report-job-group")
-                            .Build();
-                        job.JobDataMap["subject"] = subject;
-                        job.JobDataMap["user"] = user;
-                        job.JobDataMap["sysUser"] = sysUser;
+                        //Checking if the job is already added in the scheduler
+                        JobKey jobKey = JobKey.Create("report-job", "report-job-group");
+                        var reportJob = scheduler.GetJobDetail(jobKey);
 
-                        ITrigger trigger = TriggerBuilder.Create()
-                            .WithSimpleSchedule(s => s.WithIntervalInSeconds(60).RepeatForever())
-                            .Build();
+                        if (reportJob == null)
+                        {
+                            //Preparing data
+                            string subject = "Your Ticketing Report";
+                            var sysUser = db.User.Where(u => u.recordID == 999999).FirstOrDefault();
 
-                        scheduler.ScheduleJob(job, trigger);
+                            IJobDetail job = JobBuilder.Create<ReportJob>()
+                                .WithIdentity("report-job", "report-job-group")
+                                .Build();
+                            job.JobDataMap["subject"] = subject;
+                            job.JobDataMap["user"] = user;
+                            job.JobDataMap["sysUser"] = sysUser;
+
+                            ITrigger trigger = TriggerBuilder.Create()
+                                .WithSimpleSchedule(s => s.WithIntervalInSeconds(60).RepeatForever())
+                                .Build();
+
+                            scheduler.ScheduleJob(job, trigger);
+                        }
                     }
+                    
                     
                 }
                 return RedirectToAction("Index");

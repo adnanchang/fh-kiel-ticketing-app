@@ -1,0 +1,35 @@
+﻿@model FH_Kiel_Ticketing_App.Models.RoleIdentifierDetails
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>RoleIdentifierDetails</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RoleIdentifier.role)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RoleIdentifier.role)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.identifier)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.identifier)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.recordID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

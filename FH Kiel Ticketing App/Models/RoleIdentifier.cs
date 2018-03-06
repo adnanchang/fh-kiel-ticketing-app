@@ -11,7 +11,7 @@ namespace FH_Kiel_Ticketing_App.Models
     {
         [Key]
         [Required]
-        public int recordID { get; set; }
+        public int roleIdentifierID { get; set; }
 
         [Required(ErrorMessage = "A Role name is required")]
         [DisplayName("Role")]

@@ -187,8 +187,8 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 var identifier = surperUser.email;
                 var surperUserRole = db.RoleIdentifier
                        .Join(db.RoleIdentifierDetails,
-                           roleIdentifier => roleIdentifier.recordID,
-                           roleIdentifierDetails => roleIdentifierDetails.RoleIdentifier.recordID,
+                           roleIdentifier => roleIdentifier.roleIdentifierID,
+                           roleIdentifierDetails => roleIdentifierDetails.RoleIdentifier.roleIdentifierID,
                            (roleIdentifier, roleIdentifierDetails) => new { RoleIdentifier = roleIdentifier, RoleIdentifierDetails = roleIdentifierDetails })
                        .Where(roleAndDetails => identifier.Contains(roleAndDetails.RoleIdentifierDetails.identifier)).FirstOrDefault();
 
