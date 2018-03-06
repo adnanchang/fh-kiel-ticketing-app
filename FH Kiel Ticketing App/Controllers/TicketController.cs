@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -61,7 +62,9 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 var user = db.User.Where(u => u.recordID == userID).FirstOrDefault();
 
                 var student = db.Student.Where(s => s.recordID == userID).FirstOrDefault();
-                var ticket = db.Ticket.Where(t => t.recordID == id).FirstOrDefault();
+                var ticket = db.Ticket.Where(t => t.recordID == id)
+                                      .Include(t => t.ticketStatus)
+                                      .FirstOrDefault();
                 var comments = db.Comments.Where(c => c.Ticket.recordID == id).ToList();
                 var contributersNames = (from u in db.User
                                          join c in db.Contributors on u.recordID equals c.User.recordID
