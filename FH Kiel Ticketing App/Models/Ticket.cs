@@ -29,6 +29,8 @@ namespace FH_Kiel_Ticketing_App.Models
         public virtual Idea idea { get; set; }
         public virtual User User { get; set; }
         public virtual TicketStatus ticketStatus { get; set; }
+
+        public ICollection<Artifacts> artifacts { get; set; }
         
 
 

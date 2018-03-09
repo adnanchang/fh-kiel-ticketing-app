@@ -14,6 +14,9 @@ namespace FH_Kiel_Ticketing_App.Models
             public string Role { get; set; }
             
         }
+        public List<Artifacts> artifacts { get; set; }
+        public List<ArtifactTemplate> artifactsTemplet { get; set; }
+        
         public Ticket ticket { get; set; }
         public User user { get; set; }
         public Student student { get; set; }
