@@ -525,7 +525,7 @@ namespace FH_Kiel_Ticketing_App.Controllers
                     };
                     return View(viewModel);
                 }
-                
+
             }
             return RedirectToAction("AdminLogin");
         }

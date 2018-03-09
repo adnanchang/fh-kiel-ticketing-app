@@ -98,6 +98,15 @@ namespace FH_Kiel_Ticketing_App.Controllers
                         i = i - 1;
                                             }
                                     }
+                var artifacts = db.Artifacts.Where(a => a.ticket.recordID == id).ToList();
+
+                var artifactsTemplate = db.ArtifactTemplates.ToList();
+                    //.Select(at => new SelectListItem
+                    //{
+                    //    Value = at.name,
+                    //    Text = "some"
+                    //});
+
                 var studentUser = new StudentTicketViewModel
                 {
                     user = user,
@@ -108,7 +117,9 @@ namespace FH_Kiel_Ticketing_App.Controllers
                     contributorsName = contributersNames,
                     comments = comments,
                     proposal = proposal,
-                    files = ListOffiles
+                    files = ListOffiles,
+                    artifacts = artifacts,
+                    artifactsTemplet = artifactsTemplate
                 };
 
                 if (GetUserRole() != "Supervisor")
@@ -127,6 +138,33 @@ namespace FH_Kiel_Ticketing_App.Controllers
             {
                 return RedirectToAction("Login", "User");
             }
+        }
+
+        //Get: Ticket/getArtifacts
+
+        public JsonResult getArtifacts(int id, int ticketId, string templates)
+        {
+            var now = DateTime.Now;
+            var date = new DateTime(now.Year, now.Month, now.Day,
+                                    now.Hour, now.Minute, now.Second);
+           
+
+            var artifacts = db.Artifacts.Where(a => a.ArtifactTemplate.name == templates).ToList();
+            var result = new List<string>();
+            foreach (var item in artifacts)
+            {
+                
+                result.Add("<li class='list-group-item'>" + item.content + "</li>");
+                item.creationDate = date;
+                item.user = db.User.Where(u => u.recordID == id).FirstOrDefault();
+                item.ticket = db.Ticket.Where(t => t.recordID == ticketId).FirstOrDefault();
+                db.Artifacts.Add(item);
+                db.SaveChanges();
+
+            }
+            
+            return Json(result,JsonRequestBehavior.AllowGet);
+            
         }
 
         //Get: Ticket/ChangeStatus?status=
@@ -245,6 +283,25 @@ namespace FH_Kiel_Ticketing_App.Controllers
             Response.Close();
             return null;
         }
+
+        //Post: Ticket/postArtifacts
+        [HttpPost]
+        public string PostArtifacts(int id, int ticketID, string content)
+        {
+            var now = DateTime.Now;
+            var date = new DateTime(now.Year, now.Month, now.Day,
+                                    now.Hour, now.Minute, now.Second);
+            var artifact = new Artifacts();
+            artifact.content = content;
+            artifact.creationDate = date;
+            artifact.user = db.User.Where(u => u.recordID == id).FirstOrDefault();
+            artifact.ticket = db.Ticket.Where(t => t.recordID == ticketID).FirstOrDefault();
+            db.Artifacts.Add(artifact);
+            db.SaveChanges();
+            return "<li class='list-group-item'>" + content + "</li>";
+
+        }
+      
 
 
         // GET: Ticket/Details/5
