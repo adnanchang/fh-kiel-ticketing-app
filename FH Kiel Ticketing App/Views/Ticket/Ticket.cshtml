@@ -95,7 +95,7 @@
         height: 40px;
         font-size: 13px;
         vertical-align:middle;
-
+        line-height: unset;
         
     }
     .progress {
@@ -120,16 +120,16 @@
 </style>
 <div class="progress" style=" vertical-align:middle;" >
     <div class="progress-bar green " role="progressbar" style="width:15%;  ">
-        Proposal Submitted
+        <span style="vertical-align:middle">Proposal Submitted</span>
     </div>
     <div class="progress-bar justify-content-center" role="progressbar" style="width:20%; ">
-        Articats decided
+        <span style="vertical-align:middle">Artifacts Decided</span>
     </div>
     <div class="progress-bar" role="progressbar" style="width:50%; ">
-        In progress
+        <span style="vertical-align:middle">In Progress</span>
     </div>
     <div class="progress-bar" role="progressbar" style="width:15%; ">
-        Project submitted
+        <span style="vertical-align:middle">Project Submitted</span>
     </div>
 </div>
 <div class="row">
@@ -233,22 +233,18 @@
             </li>
         </ul>
         <div class="tab-content">
-            <div id="ProposalTab" class="tab-pane active">
+            <div id="ProposalTab" class="tab-pane fade ">
+                    @Html.Partial("~/Views/Ticket/ProposalPartial.cshtml", Model)
+            </div>
+            <div id="ArtifactsTab" class="tab-pane fade active in">
+                    @Html.Partial("~/Views/Ticket/ArtifactsPartial.cshtml", Model)
+            </div>
+            <div id="GeneralTab" class="tab-pane fade">
                 <div>
-                    @Html.Partial("~/Views/Ticket/ProposalPartial.cshtml", Model);
+                    @Html.Partial("~/Views/Ticket/Gerneral.cshtml", Model)
                 </div>
             </div>
-            <div id="ArtifactsTab" class="tab-pane">
-                <div>
-                    Content of proposal
-                </div>
-            </div>
-            <div id="GeneralTab" class="tab-pane">
-                <div>
-                    @Html.Partial("~/Views/Ticket/Gerneral.cshtml", Model);
-                </div>
-            </div>
-            <div id="SubmitTab" class="tab-pane">
+            <div id="SubmitTab" class="tab-pane fade">
                 <div>
                     Content of proposal
                 </div>
@@ -278,8 +274,12 @@
         <hr />
         <div class="row">
             <div class="col-lg-4">
-                <img style="width: 120%;" src="@Url.Content("~/pdficon.jpg")" />
-                <a href="/Proposal/ExportPDF/@Model.proposal.recordID">Download Proposal</a>
+                <table>
+                    <tr>
+                        <td><img style="width: 4rem;" src="@Url.Content("~/pdficon.jpg")" /></td>
+                        <td style="padding: 1rem;"><a style="font-size: 12px;" href="/Proposal/ExportPDF/@Model.proposal.recordID">Download Proposal</a></td>
+                    </tr>
+                </table>                
                 @foreach (FileInfo file in @Model.files)
                 {
                     <img style="width: 120%;" src="@Url.Content("~/pdficon.jpg")" />
