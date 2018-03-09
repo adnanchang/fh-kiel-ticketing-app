@@ -22,6 +22,8 @@ namespace FH_Kiel_Ticketing_App.Context
         public DbSet<Ticket> Ticket { get; set; }
         public DbSet<Comments> Comments { get; set; }
         public DbSet<Contributors> Contributors { get; set; }
+        public DbSet<Artifacts> Artifacts { get; set; }
+        public DbSet<ArtifactTemplate> ArtifactTemplates { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
