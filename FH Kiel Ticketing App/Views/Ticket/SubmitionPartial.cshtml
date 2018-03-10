@@ -1,0 +1,40 @@
+﻿@model FH_Kiel_Ticketing_App.Models.StudentTicketViewModel
+
+<script type="text/javascript">
+    function getTextBoxContent() {
+        return document.getElementById('content').value;
+    }
+
+    function makeVisible() {
+        document.getElementById("reqbox").style.display = "normal";
+    }
+    $(document).ready(function () {
+      
+        $("#update").click(function () {
+            $("#artifactsprogress").addClass("green");
+        });
+       
+
+
+});
+</script>
+<div class="row">
+    <div class="col-lg-4">
+        <table>
+
+
+
+            @foreach (FileInfo file in @Model.files)
+    {
+
+        <tr class="list-group-item">
+            <td><input type="checkbox" /></td>
+            <td>
+                <a href="/Ticket/DownloadPDF?filename=@file">@file</a>
+            </td>
+        </tr>
+}
+        </table>
+</div>
+    <button type="button" id="artifactsprogress">update progress</button>
+</div>
