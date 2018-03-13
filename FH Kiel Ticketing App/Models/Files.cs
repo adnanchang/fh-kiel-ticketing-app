@@ -17,7 +17,7 @@ namespace FH_Kiel_Ticketing_App.Models
         [Required]
         public DateTime CreationDate { get; set; }
 
-        public HttpPostedFileBase File { get; set; }
+        public string File { get; set; }
 
     }
 }

@@ -65,6 +65,10 @@ namespace FH_Kiel_Ticketing_App.Controllers
                 var ticket = db.Ticket.Where(t => t.recordID == id)
                                       .Include(t => t.ticketStatus)
                                       .FirstOrDefault();
+                var submission = db.Submissions.
+                    Include("Files").
+                    Where(s => s.Ticket.recordID == id).FirstOrDefault();
+             
                 var comments = db.Comments.Where(c => c.Ticket.recordID == id).ToList();
                 var contributersNames = (from u in db.User
                                          join c in db.Contributors on u.recordID equals c.User.recordID
@@ -119,7 +123,8 @@ namespace FH_Kiel_Ticketing_App.Controllers
                     proposal = proposal,
                     files = ListOffiles,
                     artifacts = artifacts,
-                    artifactsTemplet = artifactsTemplate
+                    artifactsTemplet = artifactsTemplate,
+                    submission = submission
                 };
 
                 if (GetUserRole() != "Supervisor")
@@ -138,6 +143,35 @@ namespace FH_Kiel_Ticketing_App.Controllers
             {
                 return RedirectToAction("Login", "User");
             }
+        }
+
+        [HttpPost]
+        public string[] PostSubmission(int id, int ticketID, string[] files)
+        {
+            var now = DateTime.Now;
+            var date = new DateTime(now.Year, now.Month, now.Day,
+                                    now.Hour, now.Minute, now.Second);
+            var dbFiles = new List<Files>();
+            foreach(var s in files)
+            {
+                var f = new Files();
+                f.File = s;
+                f.CreationDate = date;
+                f.User = db.User.Where(u => u.recordID == id).FirstOrDefault();
+                dbFiles.Add(f);
+              
+            }
+            var submission = new Submission();
+            submission.User = db.User.Where(u => u.recordID == id).FirstOrDefault();
+            submission.Ticket = db.Ticket.Where(t => t.recordID == ticketID).FirstOrDefault();
+            submission.submissionDate = date;
+            submission.Files = dbFiles;
+            db.Submissions.Add(submission);
+            db.SaveChanges();
+
+
+
+            return files;
         }
 
         //Get: Ticket/getArtifacts

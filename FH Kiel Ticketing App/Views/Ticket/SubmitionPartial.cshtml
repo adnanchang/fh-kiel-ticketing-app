@@ -1,40 +1,197 @@
 ﻿@model FH_Kiel_Ticketing_App.Models.StudentTicketViewModel
 
-<script type="text/javascript">
-    function getTextBoxContent() {
-        return document.getElementById('content').value;
+<style>
+    .green {
+        background-color: green;
     }
+
+    .disabledbutton {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+    #ex1Slider .slider-selection {
+        background: #BABABA;
+    }
+    .tdstyle {
+        border-bottom: 25px solid transparent;
+        padding-right:50px;
+    }
+    .slider.slider-horizontal {
+        width: 500px !important;
+    }
+</style>
+<script type="text/javascript">
+
+
 
     function makeVisible() {
         document.getElementById("reqbox").style.display = "normal";
     }
     $(document).ready(function () {
-      
-        $("#update").click(function () {
-            $("#artifactsprogress").addClass("green");
+        $('#ex1').slider({
+            formatter: function (value) {
+                return ' ' + value;
+            }
         });
-       
+        $('#ex2').slider({
+            formatter: function (value) {
+                return ' ' + value;
+            }
+        });
+        $('#ex3').slider({
+            formatter: function (value) {
+                return ' ' + value;
+            }
+        });
+        $('#ex4').slider({
+            formatter: function (value) {
+                return ' ' + value;
+            }
+        });
+        $('#ex5').slider({
+            formatter: function (value) {
+                return ' ' + value;
+            }
+        });
+
+        $("#submitfiles").click(function () {
+
+            var files = [];
+            if (confirm("you are about to submit the project")) {
+                $('input[name="sCheck"]:checked').each(function () {
+
+                    files.push(this.value);
+                });
+                console.log(files);
+
+                $.ajax({
+                    url: "/Ticket/PostSubmission",
+                    type: "POST",
+                    data: {
+                        id: @Model.user.recordID,
+                        ticketID: @Model.ticket.recordID,
+                        files: files
+
+                    },
+                    success: function (data) {
+                        $("#submitfiles").prop('value', 'Files Submitted for Grading');
+                        $("#submitfiles").html('Files Submitted for Grading');
+                        $("#submitfiles").addClass('contributor');
+                        alert("done");
+                        $("#fileLocation").addClass("disabledbutton");
+                    }
+                });
+
+                $("#artifactsprogress").addClass("green");
+            }
+
+        });
 
 
-});
+
+    });
+   
+
+    // Without JQuery
+    var slider = new Slider('#ex1', {
+        formatter: function (value) {
+            return 'Current value: ' + value;
+        }
+    });
 </script>
-<div class="row">
-    <div class="col-lg-4">
-        <table>
+@if (Request.Cookies["UserCookie"]["UserRole"] == "Student")
+{
+    <div class="row">
+        <div class="col-lg-4">
+            <div id="fileLocation">
+                <table style="margin-top: 20px;">
+
+                    @foreach (FileInfo file in @Model.files)
+                    {
+
+                        <tr class="list-group-item">
+                            <td style="border: 3px;"> <input name="sCheck" id="sCheck" type="checkbox" value="@file"> </td>
+                            <td>
+                                <div style="padding-left:9px; padding-right:9px;"><a href="/Ticket/DownloadPDF?filename=@file"> @file</a></div>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <td> <button class="contributor" type="button" style="margin-top: 10px;" id="submitfiles"> Submit </button></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
 
 
-            @foreach (FileInfo file in @Model.files)
-    {
-
-        <tr class="list-group-item">
-            <td><input type="checkbox" /></td>
-            <td>
-                <a href="/Ticket/DownloadPDF?filename=@file">@file</a>
-            </td>
-        </tr>
+    </div>
 }
-        </table>
-</div>
-    <button type="button" id="artifactsprogress">update progress</button>
-</div>
+@if (Request.Cookies["UserCookie"]["UserRole"] == "Supervisor")
+{
+    foreach(var item in Model.submission.Files)
+    {
+        <div class="list-group-item"> <a href="/Ticket/DownloadPDF?filename=@item.File"> @item.File</a></div>
+    }
+
+        <div>
+            <h3> Evaluation </h3>
+            <table>
+                <tr >
+                    <td class="tdstyle">
+                        <b>Quality of Project </b>
+                    </td>
+                    <td >
+                        <input id="ex1" data-slider-id='ex1Slider' type="text" width:"400px" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="14" />
+                    </td>
+
+                </tr>
+                <tr >
+                    <td class="tdstyle">
+                        <b>Requirement met </b>
+                    </td>
+                    <td>
+                        <input id="ex2" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="14" />
+                    </td>
+
+                </tr>
+                <tr class="tdstyle">
+                    <td>
+                        <b>Documentation </b>
+                    </td>
+                    <td>
+                        <input id="ex3" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="14" />
+                    </td>
+
+                </tr>
+                <tr class="tdstyle">
+                    <td>
+                        <b>This </b>
+                    </td>
+                    <td>
+                        <input id="ex4" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="14" />
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td>
+                        <b>that </b>
+                    </td>
+                    <td>
+                        <input id="ex5" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="14" />
+                    </td>
+
+                </tr>
+
+            </table>
+        </div>
+        <div style="margin-top:40px">
+            <div><a href="#">Generate Report</a> </div>
+            <br />
+            <div><a href="#">Send Report</a> </div>
+        </div>
+}

@@ -2,68 +2,71 @@
 
 
 <style>
-    
 
 
-    .reqbox{
-       
-    }
-    .glyphicon-plus{
-        color:forestgreen;
-        font-size:larger;
-    }
-    .savetemplate{
 
+    .reqbox {
     }
-    .usetemplate{
-        position:relative;
-        float:right;
-        padding-top:1em;
+
+    .glyphicon-plus {
+        color: forestgreen;
+        font-size: larger;
     }
-    .list-group{
-        padding-top:2em;
-        width:70%;
+
+    .savetemplate {
     }
-    
+
+    .usetemplate {
+        position: relative;
+        float: right;
+        padding-top: 1em;
+    }
+
+    .list-group {
+        padding-top: 2em;
+        width: 70%;
+    }
 </style>
+@if (Request.Cookies["UserCookie"]["UserRole"] == "Supervisor")
+{
+    <div class="usetemplate">
+        @using (Ajax.BeginForm("getArtifacts", new { id = Model.user.recordID, ticketId = Model.ticket.recordID },
+       new AjaxOptions()
+       {
+           HttpMethod = "get",
+           UpdateTargetId = "artifacts",
+           InsertionMode = InsertionMode.Replace
+       }, new { @class = "usetemplate" }))
+        {
 
-<div class="usetemplate">
-    @using (Ajax.BeginForm("getArtifacts", new { id = Model.user.recordID, ticketId = Model.ticket.recordID },
-   new AjaxOptions()
-   {
-       HttpMethod = "get",
-       UpdateTargetId = "artifacts",
-       InsertionMode = InsertionMode.Replace
-   }, new { @class = "usetemplate" }))
-    {
+            <select name="templates" id="templates">
+                @foreach (var item in Model.artifactsTemplet)
+                {
+                    <option value="@item.name">
+                        @item.name
+                    </option>
+                }
+            </select>
 
-        <select name="templates" id="templates">
-            @foreach (var item in Model.artifactsTemplet)
-            {
-                <option value="@item.name">
-                    @item.name
-                </option>
-            }
-        </select>
-        
-        <div style="position:relative; padding-top: 1em;">
-            <button type="submit" id="submit" value="OK"> OK    </button>
-        </div>
-    }
-</div>
-<div >
+            <div style="position:relative; padding-top: 1em;">
+                <button type="submit" id="submit" value="OK"> OK    </button>
+            </div>
+        }
+    </div>
+}
+<div>
     <ul class="list-group" name="artifacts" id="artifacts">
 
         @foreach (var item in Model.artifacts)
-    {
+        {
 
-        <li class="list-group-item">
+            <li class="list-group-item">
 
-            @Html.DisplayFor(modelItem => item.content)
-        </li>
+                @Html.DisplayFor(modelItem => item.content)
+            </li>
 
 
-}
+        }
     </ul>
 </div>
 
@@ -74,7 +77,7 @@
     }
 
     function makeVisible() {
-        document.getElementById("reqbox").style.display = "normal"; 
+        document.getElementById("reqbox").style.display = "normal";
     }
     $(document).ready(function () {
         $("#reqbox").hide();
@@ -88,43 +91,46 @@
             $("#reqbox").hide();
         });
 
- 
-});
-</script>
-<table style="margin-top:2rem;">
-    <tr >
-        <td><div class="glyphicon glyphicon-plus" id="showme"  ></div></td>
-    </tr>
-    <tr id="reqbox" class="reqbox">
-       
-    <td style="padding:1rem;">
 
-        <span class="glyphicon glyphicon-remove" id="hideme" style="color:#B20000;" />
-    </td>
-
-    @using (Ajax.BeginForm("PostArtifacts", new { id = Model.user.recordID, ticketID = Model.ticket.recordID }, new AjaxOptions()
-    {
-        HttpMethod = "Post",
-        UpdateTargetId = "artifacts",
-        InsertionMode = InsertionMode.InsertAfter
-    }, new { @class = "glyphicon glyphicon-ok" }
-    ))
-    {
-        <td width="100%"> <input id="content" name="content" type="text" class="form-control" placeholder="Type Requirement Here" style="width:100%;max-width:1000px;"></td>
-        <td>
-            <button type="submit" id="submit" class="glyphicon glyphicon-ok">
-                <span></span>
-            </button>
-        </td>
-    }
-
-</tr>
-</table>
-<script>
-    $("#lnk").click(function (evt) {
-        var fakedUri = $("#T").prop("href");
-        var uri = fakedUri.replace("something", $("#txtcontent").val());
     });
 </script>
+@if (Request.Cookies["UserCookie"]["UserRole"] == "Supervisor")
+{
+    <table style="margin-top:2rem;">
+        <tr>
+            <td><div class="glyphicon glyphicon-plus" id="showme"></div></td>
+        </tr>
+        <tr id="reqbox" class="reqbox">
+
+            <td style="padding:1rem;">
+
+                <span class="glyphicon glyphicon-remove" id="hideme" style="color:#B20000;" />
+            </td>
+
+            @using (Ajax.BeginForm("PostArtifacts", new { id = Model.user.recordID, ticketID = Model.ticket.recordID }, new AjaxOptions()
+            {
+                HttpMethod = "Post",
+                UpdateTargetId = "artifacts",
+                InsertionMode = InsertionMode.InsertAfter
+            }, new { @class = "glyphicon glyphicon-ok" }
+    ))
+            {
+                <td width="100%"> <input id="content" name="content" type="text" class="form-control" placeholder="Type Requirement Here" style="width:100%;max-width:1000px;"></td>
+                <td>
+                    <button type="submit" id="submit" class="glyphicon glyphicon-ok">
+                        <span></span>
+                    </button>
+                </td>
+            }
+
+        </tr>
+    </table>
+}
+    <script>
+        $("#lnk").click(function (evt) {
+            var fakedUri = $("#T").prop("href");
+            var uri = fakedUri.replace("something", $("#txtcontent").val());
+        });
+    </script>
 
 

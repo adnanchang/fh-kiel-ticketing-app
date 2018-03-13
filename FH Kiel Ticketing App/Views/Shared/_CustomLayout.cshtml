@@ -7,10 +7,6 @@
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
-
-
-   
     <style type="text/css">
         /*
              I am going to overwrite css rather than
@@ -35,6 +31,7 @@
     </style>
 </head>
 <body>
+
     <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -51,7 +48,39 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav"></ul>
-
+                @if (Request.Cookies["UserCookie"] != null)
+                {
+                    var userRole = Request.Cookies["UserCookie"]["UserRole"];
+                    var notifications = 0;
+                    foreach (var item in Model.user.Notification)
+                    {
+                        if (item.isRead == false)
+                        {
+                            notifications++;
+                        }
+                    }
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/User/Login">Hey, @Model.user.firstName</a></li>
+                            <li>
+                                <a href="/@userRole/Notifications">
+                                    Notifications @if (notifications != 0)
+                                    {
+                                        <span class="badge">@notifications</span>
+                                    }
+                                </a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Settings<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="/@userRole/Edit/@Model.user.recordID">Profile Settings</a></li>
+                                    <li><a href="/Proposal/Index/">Proposal</a></li>
+                                    <li><a href="/User/Logout">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                }
             </div>
 
         </div>
@@ -65,26 +94,8 @@
         </footer>
     </div>
 
-
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-
-    
-
 </body>
 </html>
-
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/bootstrap")
-<script>
-    $(document).ready(function () {
-        $('#rootwizard').bootstrapWizard({
-            onTabShow: function (tab, navigation, index) {
-                var $total = navigation.find('li').length;
-                var $current = index + 1;
-                var $percent = ($current / $total) * 100;
-                $('#rootwizard .progress-bar').css({ width: $percent + '%' });
-            }
-        });
-
-    });
-</script>

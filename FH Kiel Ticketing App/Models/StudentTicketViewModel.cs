@@ -29,6 +29,8 @@ namespace FH_Kiel_Ticketing_App.Models
 
         public List<FileInfo> files { get; set; }
 
+        public Submission submission { get; set; }
+
 
 
     }

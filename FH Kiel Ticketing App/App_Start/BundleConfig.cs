@@ -22,10 +22,13 @@ namespace FH_Kiel_Ticketing_App
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js",
+                      "~/Scripts/jquery.unobtrusive-ajax.js",
+                      "~/Scripts/bootstrap-slider.min.js",
                       "~/Scripts/jquery.bootstrap.wizard.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap-flatly.css",
+                      "~/Content/bootstrap-slider.css",
                       "~/Content/site.css"));
         }
             

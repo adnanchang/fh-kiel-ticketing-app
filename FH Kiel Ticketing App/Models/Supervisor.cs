@@ -20,7 +20,7 @@ namespace FH_Kiel_Ticketing_App.Models
         [DisplayName("Email Frequency (Days)")]
         [DataType(DataType.Text)]
         public string daysForReport { get; set; }
-        public string nothing { set; get; }
+        
 
         [NotMapped]
         public int[] selectedFields { get; set; }
